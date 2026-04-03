@@ -1,0 +1,61 @@
+---
+import { Astro } from 'astro';
+import Seo from '../components/Seo.astro';
+
+const { title, description, image, pubDate, tags } = Astro.props.frontmatter;
+const siteBase = 'https://www.kyticaodsrdca.netlify.app'; // <-- Uprav na svoju reálnu doménu
+const currentUrl = `${siteBase}${Astro.url.pathname}`;
+const ogImage = image?.url ? `${siteBase}${image.url}` : `${siteBase}/default-og.jpg`; // fallback
+---
+
+<html lang="sk">
+  <head>
+ <meta charset="UTF-8" />
+ <title>{title}</title>
+ <meta name="description" content={description} />
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+ <!-- Open Graph -->
+ <meta property="og:type" content="article" />
+ <meta property="og:title" content={title} />
+ <meta property="og:description" content={description} />
+ <meta property="og:image" content={ogImage} />
+ <meta property="og:url" content={currentUrl} />
+ <meta property="og:site_name" content="Kytica od srdca" />
+
+ <!-- Twitter Card -->
+ <meta name="twitter:card" content="summary_large_image" />
+ <meta name="twitter:title" content={title} />
+ <meta name="twitter:description" content={description} />
+ <meta name="twitter:image" content={ogImage} />
+
+ <!-- Optional: Štruktúrované dáta pre vyhľadávače -->
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{title}",
+  "image": "{ogImage}",
+  "datePublished": "{pubDate}",
+  "author": {
+ "@type": "Organization",
+ "name": "Kytica od srdca"
+  },
+  "description": "{description}",
+  "mainEntityOfPage": {
+ "@type": "WebPage",
+ "@id": "{currentUrl}"
+  }
+}
+ </script>
+ <meta name="google-site-verification" content="noDiIbONjqdjIhr0ZIkWMAva4H2AJ214XZFZ8QHw_GM" />
+  </head>
+
+  <body>
+ <main class="blog-post">
+<article>
+  <slot />
+</article>
+ </main>
+  </body>
+</html>

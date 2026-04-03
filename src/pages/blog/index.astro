@@ -1,0 +1,70 @@
+---
+// Súbor: src/pages/blog/index.astro
+
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BlogPostCard from '../../components/BlogPostCard.astro';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const pageTitle = "Blog | Kytica od srdca";
+const pageDescription = "Novinky, tipy a inšpirácie zo sveta kvetov a aranžovania.";
+---
+<Layout title={pageTitle} description={pageDescription}>
+ <Header />
+ <main>
+  <section class="blog-archive">
+<h1 class="heading">Náš <span>Blog</span></h1>
+<p class="subheading-text">Všetky naše články, tipy a inšpirácie na jednom mieste.</p>
+
+<div class="blog-posts-grid">
+ {sortedPosts.map(post => (
+  <BlogPostCard post={post} />
+ ))}
+</div>
+
+<div class="back-link-container">
+ <a href="/" class="btn btn-secondary" id="blog-index-back-btn">← Späť na hlavnú stránku</a>
+</div>
+
+  </section>
+ </main>
+ <Footer />
+</Layout>
+
+<style>
+ .blog-posts-grid {
+  cursor: pointer;
+ }
+
+ .blog-archive {
+  padding: 12rem 9% 8rem;
+  max-width: 1200px;
+  margin: 0 auto;
+ }
+ .subheading-text {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-top: -3rem;
+  margin-bottom: 6rem;
+  color: var(--text-color);
+  opacity: 0.8;
+ }
+ .back-link-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 6rem;
+ }
+
+ /* Cielený štýl pre tlačidlo na tejto stránke v light mode */
+ body.light-mode #blog-index-back-btn {
+  color: var(--accent-color);
+ }
+ body.light-mode #blog-index-back-btn:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+ }
+</style>

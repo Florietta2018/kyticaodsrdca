@@ -1,0 +1,119 @@
+---
+// FINÁLNA VERZIA: src/pages/blog/[slug].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  return allPosts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+type Props = {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// TOTO JE SPRÁVNE: Automaticky načíta celú a správnu URL aktuálneho článku
+const shareUrl = Astro.url.href; 
+const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+
+const getTagClass = (tag: string) => {
+    switch (tag.toLowerCase()) {
+        case 'svadba':
+        case 'trendy': return 'tag-wedding';
+        case 'starostlivosť':
+        case 'tipy': return 'tag-care';
+        case 'inšpirácia': return 'tag-inspiration';
+        case 'sezónne': return 'tag-seasonal';
+        default: return '';
+    }
+};
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.data.title,
+    "description": post.data.description,
+    "datePublished": post.data.pubDate.toISOString(),
+    "image": new URL(post.data.image.url, Astro.site).href,
+    "author": { "@type": "Organization", "name": "Kytica od srdca" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kytica od srdca",
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL('/img/LOGO_KRUH-pinkwhite.png', Astro.site).href 
+      }
+    }
+};
+---
+<Layout 
+    title={post.data.title} 
+    description={post.data.description}
+    image={post.data.image.url}
+>
+    <Fragment slot="head">
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    </Fragment>
+
+    <Header />
+    <main>
+        <article class="blog-post-detail">
+            <header class="post-header">
+                <h1 class="heading">{post.data.title}</h1>
+                <div class="post-meta">
+                    <span>Publikované: {post.data.pubDate.toLocaleDateString('sk-SK', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    <div class="tags">
+                        {post.data.tags.map(tag => (
+                            <span class={`tag ${getTagClass(tag)}`}>{tag}</span>
+                        ))}
+                    </div>
+                </div>
+                <img src={post.data.image.url} alt={post.data.image.alt} class="hero-image"/>
+            </header>
+            
+            <div class="post-content">
+                <Content />
+            </div>
+
+            <div class="post-footer">
+                <a href={facebookShareLink} class="share-link-simple" target="_blank" rel="noopener noreferrer">
+                    <i class='bx bxl-facebook-square'></i> Zdieľať na Facebooku
+                </a>
+                <a href="/blog" class="btn btn-secondary">← Späť na všetky články</a>
+            </div>
+            
+        </article>
+    </main>
+    <Footer />
+</Layout>
+
+<style>
+/* Štýly pre layout stránky, ktoré ste si upravili */
+.blog-post-detail { padding: 12rem 5% 8rem; max-width: 800px; margin: 0 auto; }
+.post-header { text-align: center; margin-bottom: 4rem; }
+.post-meta {
+    font-size: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+.post-meta .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+.hero-image { width: 100%; max-height: 450px; object-fit: cover; border-radius: var(--border-radius-lg); margin-bottom: 4rem; }
+.post-footer { display: flex; flex-direction: column; flex-wrap: wrap; justify-content: center; align-items: center; gap: 3rem; margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--border-color); }
+.share-link-simple { display: inline-flex; align-items: center; gap: 0.8rem; font-size: 1.6rem; font-weight: 500; color: #1877F2; text-decoration: none; opacity: 1; transition: opacity 0.3s ease; }
+.share-link-simple i { font-size: 2.4rem; }
+</style>

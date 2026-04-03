@@ -1,0 +1,39 @@
+---
+// Súbor: src/pages/index.astro
+
+// 1. Importujeme hlavný Layout a všetky komponenty, ktoré chceme použiť.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import HeroSection from '../components/HeroSection.astro';
+import CreationsSection from '../components/CreationsSection.astro';
+import StorySection from '../components/StorySection.astro';
+import BlogPreviewSection from '../components/BlogPreviewSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import Footer from '../components/Footer.astro';
+import ScrollTopBtn from '../components/ScrollTopBtn.astro';
+import GalleryModal from '../components/GalleryModal.astro';
+import MenuOverlay from '../components/MenuOverlay.astro';
+
+// 2. Definuje sa titulok a popis pre túto konkrétnu stránku.
+const pageTitle = "Kytica od srdca | Vaše Kvetinárstvo v Trenčianskej Teplej | Donáška Kvetov";
+const pageDescription = "Objavte Kytica od srdca – vaše lokálne kvetinárstvo v Trenčianskej Teplej. Ponúkame čerstvé kvety, aranžmány na mieru, svadobné kytice a donášku kvetov.";
+---
+<Layout title={pageTitle} description={pageDescription}>
+    
+    <Header />
+
+    <main>
+        <HeroSection />
+        <CreationsSection />
+        <StorySection />
+        <BlogPreviewSection />
+        <ContactSection />
+    </main>
+
+    <Footer />
+
+    <ScrollTopBtn />
+    <GalleryModal />
+    <MenuOverlay />
+
+</Layout>

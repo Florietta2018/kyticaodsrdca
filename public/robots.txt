@@ -1,0 +1,10 @@
+# Pôvodné pravidlo pre všetky roboty
+User-agent: *
+Allow: /
+
+# NOVÁ ČASŤ: Špeciálne povolenie pre Facebook robota
+User-agent: facebookexternalhit
+Allow: /
+
+# Odkaz na sitemap
+Sitemap: https://kyticaodsrdca.sk/sitemap-0.xml

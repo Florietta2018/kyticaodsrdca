@@ -1,0 +1,27 @@
+---
+// Súbor: src/components/BlogPreviewSection.astro
+import { getCollection } from 'astro:content';
+import BlogPostCard from './BlogPostCard.astro'; // Importujeme náš vylepšený komponent
+
+// 1. Získame všetky príspevky z kolekcie 'blog'
+const allPosts = await getCollection('blog');
+
+// 2. Zoradíme ich od najnovšieho po najstarší
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 3. Zoberieme len prvé dva najnovšie príspevky
+const latestTwoPosts = sortedPosts.slice(0, 2);
+---
+<section class="blog-section" id="blog">
+ <h2 class="heading fade-in-element">Novinky z nášho <span>Blogu</span></h2>
+ 
+ <div class="blog-posts-grid fade-in-element">
+  {latestTwoPosts.map(post => (
+<BlogPostCard post={post} />
+  ))}
+ </div>
+
+ <div class="text-center fade-in-element">
+  <a href="/blog" class="btn btn-primary btn-medium">Všetky články</a>
+ </div>
+</section>
