@@ -136,7 +136,8 @@ a:focus-visible, button:focus-visible, .btn:focus-visible { outline: 3px solid v
 .btn-primary { background: var(--accent-color); color: rgb(233,232,232); border: 2px solid var(--accent-color); }
 .btn-primary:hover { background: var(--hover); border-color: var(--hover); }
 .btn-secondary {
-    background: transparent;
+    background: #00000063;
+    backdrop-filter: blur(2px);
     color: rgb(232, 232, 232); /* Táto farba platí len pre tmavý režim */
     border: 2px solid var(--accent-color);
 }
@@ -311,7 +312,9 @@ body.light-mode .logo-light { display: block; }
 
 /* GLOBÁLNA OPRAVA FARBY PRE SEKUNDÁRNE TLAČIDLÁ V LIGHT MODE */
 body.light-mode .btn-secondary {
-    color: var(--text-color); 
+    color: rgb(232, 232, 232); 
+    background: #00000063;
+    backdrop-filter: blur(2px);
 }
 body.light-mode .btn-secondary:hover {
     background-color: var(--accent-color);
