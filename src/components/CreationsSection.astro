@@ -1,48 +1,98 @@
 ---
 // Súbor: src/components/CreationsSection.astro
+import { Image } from 'astro:assets';
+import imgSpolocna from '../assets/img/spolocna.webp';
+import imgMini6 from '../assets/img/mini6.webp';
+import imgMini2 from '../assets/img/mini2.webp';
+import imgMini1 from '../assets/img/mini1.webp';
+import imgMini3 from '../assets/img/mini3.webp';
+import imgObrazokObchodu from '../assets/img/obrazokobchodu.webp';
+import imgMini4 from '../assets/img/mini4.webp';
 ---
 <section class="creations" id="creations">
- <h2 class="heading fade-in-element">Naša <span>Tvorba</span></h2>
+  
+  <div class="intro-container fade-in-element">
+    <div class="intro-medallion">
+      <Image src={imgSpolocna} alt="Tím Kytica od srdca" loading="lazy" />
+    </div>
+    <h2 class="intro-heading">Viazané s láskou a dušou</h2>
+    <div class="intro-text">
+      <p>Každá kytica, ktorú vytvoríme, nesie v sebe viac než kvety — nesie pozornosť, čas a rešpekt k prírode. <span class="highlight">Sezónne. Lokálne. Na mieru.</span></p>
+      <p class="signature">Navštívte nás v Trenčianskej Teplej a odneste si domov kúsok krásy.</p>
+    </div>
+  </div>
+
+  <h2 class="heading fade-in-element">Naša <span>ponuka</span></h2>
  <div class="creations-container">
-  <div class="creation-box tall fade-in-element">
-<img src="/img/mini6.webp" alt="Biela svadobná kytica s ružami a pivóniou v rukách nevesty, kvetinárstvo Kytica od srdca Trenčianska Teplá" loading="lazy">
+  
+  <!-- Slider Wrapper pre mobil (na desktope display: contents) -->
+  <div class="slider-wrapper" id="creations-slider">
+   <div class="creation-box tall fade-in-element">
+<Image src={imgMini6} alt="Biela svadobná kytica s ružami a pivóniou v rukách nevesty, kvetinárstvo Kytica od srdca Trenčianska Teplá" loading="lazy" />
 <div class="creation-layer"><h4>Svadobný Sen</h4></div>
   </div>
   <div class="creation-box fade-in-element">
-<img src="/img/mini2.webp" alt="Elegantná kytica z bielych kál (cally) na pozadí Trenčianskeho hradu, Svadobné kvety kvetinárstvo Kytica od srdca Trenčianska Teplá" loading="lazy">
+<Image src={imgMini2} alt="Elegantná kytica z bielych kál (cally) na pozadí Trenčianskeho hradu, Svadobné kvety kvetinárstvo Kytica od srdca Trenčianska Teplá" loading="lazy" />
 <div class="creation-layer"><h4>Čistá elegancia</h4></div>
   </div>
   <div class="creation-box fade-in-element">
-<img src="/img/mini1.webp" alt="Svadobné kvetinové aranžmány na stoloch s ružami a zeleňou, Výzdoba udalostí Kytica od srdca" loading="lazy">
+<Image src={imgMini1} alt="Svadobné kvetinové aranžmány na stoloch s ružami a zeleňou, Výzdoba udalostí Kytica od srdca" loading="lazy" />
 <div class="creation-layer"><h4>Svadobná romanca</h4></div>
   </div>
   <div class="creation-box tall fade-in-element">
-<img src="/img/mini4.webp" alt="Kvetinový box plný farebných kvetov, Kytice na mieru Trenčianska Teplá" loading="lazy">
-<div class="creation-layer"><h4>Okamih krásy</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<img src="/img/mini3.webp" alt="Svadobná kytica z ružových a bielych ruží s gypsomilou, Svadobné kytice Trenčianska Teplá" loading="lazy">
+<Image src={imgMini3} alt="Svadobná kytica z ružových a bielych ruží s gypsomilou, Svadobné kytice Trenčianska Teplá" loading="lazy" />
 <div class="creation-layer"><h4>Vôňa Diaľok</h4></div>
   </div>
   <div class="creation-box fade-in-element">
-<img src="/img/1.webp" alt="Pestrá letná kytica s ružami a margarétkami, Kytica od srdca" loading="lazy">
-<div class="creation-layer"><h4>Letný vánok</h4></div>
+<Image src={imgObrazokObchodu} alt="Ateliér kvetinárstva Kytica od srdca" loading="lazy" />
+<div class="creation-layer"><h4>Náš ateliér</h4></div>
   </div>
   <div class="creation-box fade-in-element">
-<img src="/img/2.webp" alt="Jarná kytica z tulipánov a narcisov, Čerstvé kvety Trenčianska Teplá" loading="lazy">
-<div class="creation-layer"><h4>Jarné prebudenie</h4></div>
+<Image src={imgMini4} alt="Kvetinový box plný farebných kvetov, Kytice na mieru Trenčianska Teplá" loading="lazy" />
+<div class="creation-layer"><h4>Okamih krásy</h4></div>
   </div>
-  <div class="creation-box fade-in-element">
-<img src="/img/3.webp" alt="Exotická kytica s orchideami a tropickým lístím, Aranžmány Trenčianska Teplá" loading="lazy">
-<div class="creation-layer"><h4>Láska v každom lupeni</h4></div>
   </div>
-  <div class="creation-box fade-in-element">
-<img src="/img/4.webp" alt="Exotická kytica z netradičných kvetov, Kvetinová tvorba Trenčianska Teplá" loading="lazy">
-<div class="creation-layer"><h4>Nadčasová vznešenosť</h4></div>
+  
+  <!-- Indikátor posunu (len pre mobil) -->
+  <div class="slider-indicator-container">
+    <div class="slider-track">
+      <div class="slider-thumb" id="slider-thumb"></div>
+    </div>
+    <div class="swipe-hint">Swipuj doprava &rarr;</div>
   </div>
-  <div class="creation-box fade-in-element">
-<img src="/img/veniec2.webp" alt="Pohrebný veniec s bielymi ľaliami a zeleňou, Smútočné vence Trenčianska Teplá" loading="lazy">
-<div class="creation-layer"><h4>Spomienka v kvete</h4></div> 
+
+  <!-- Obal pre info karty, aby mohli byť na tablete vedľa seba -->
+  <div class="info-cards-wrapper">
+    <!-- Info Card: Otváracie Hodiny a Kontakt -->
+    <div class="creation-box info-card fade-in-element">
+    <div class="info-card-content">
+      <h5>Zastavte sa u nás</h5>
+      <p class="address">M. R. Štefánika 360<br>Trenčianska Teplá</p>
+      <div class="divider"></div>
+      <ul class="hours">
+        <li><span>Po – Pi</span><span>9:00 – 17:00</span></li>
+        <li><span>So</span><span>8:00 – 12:00</span></li>
+        <li><span>Ne</span><span>Zatvorené</span></li>
+      </ul>
+      <div class="contact-links">
+        <a href="tel:+421940181839" aria-label="Zavolať"><i class='bx bxs-phone'></i></a>
+        <a href="mailto:kyticaodsrdca@gmail.com" aria-label="Napísať email"><i class='bx bxs-envelope'></i></a>
+        <a href="https://www.facebook.com/kyticaodsrdca/?locale=sk_SK" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class='bx bxl-facebook'></i></a>
+      </div>
+    </div>
   </div>
- </div>
-</section>
+  
+  <!-- Info Card: Online Ponuka -->
+  <a href="https://online.kyticaodsrdca.sk" target="_blank" rel="noopener noreferrer" class="creation-box info-card online-card fade-in-element">
+    <div class="info-card-content">
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+      </div>
+      <h5>Objavte kúzlo<br>online</h5>
+      <p>Pozrite si našu ponuku z pohodlia domova a vyzdvihnite si kyticu, darček bez čakania.</p>
+      <span class="explore-link">Prejsť do Online ponuky <span>&rarr;</span></span>
+    </div>
+  </a>
+  </div> <!-- Ukončenie info-cards-wrapper -->
+  </div> <!-- Ukončenie creations-container -->
+ </section>

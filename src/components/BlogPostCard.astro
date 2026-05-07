@@ -1,6 +1,7 @@
 ---
 // Súbor: src/components/BlogPostCard.astro
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -28,7 +29,7 @@ return '';
 ---
 <article class="blog-post-card fade-in-element">
 <a href={`/blog/${post.slug}/`} class="post-card-image-link">
-<img src={image.url} alt={image.alt} class="post-card-image" loading="lazy">
+<Image src={image.url} alt={image.alt} class="post-card-image" loading="lazy" />
 </a>
 
 <div class="post-card-content">

@@ -1,9 +1,11 @@
 ---
 // Súbor: src/components/StorySection.astro
+import { Image } from 'astro:assets';
+import imgObrazokObchodu from '../assets/img/obrazokobchodu.webp';
 ---
 <section class="story" id="story">
  <div class="story-img fade-in-element">
-  <img src="/img/obrazokobchodu.webp" alt="Fotografia z ateliéru kvetinárstva Kytica od srdca" loading="lazy">
+  <Image src={imgObrazokObchodu} alt="Fotografia z ateliéru kvetinárstva Kytica od srdca" loading="lazy" />
  </div>
  <div class="story-content fade-in-element">
   <h3>Viazané s láskou a dušou</h3>

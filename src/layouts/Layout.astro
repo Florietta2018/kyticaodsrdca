@@ -1,5 +1,6 @@
 ---
 // FINÁLNA VERZIA: src/layouts/Layout.astro
+import { ViewTransitions } from 'astro:transitions';
 import '../styles/styles.css';
 
 
@@ -7,9 +8,10 @@ interface Props {
 	title: string;
 	description: string;
 	image?: string; 
+    pageType?: string;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, pageType = 'home' } = Astro.props;
 
 // --- NOVÁ ČASŤ: Logika pre dynamický obrázok ---
 // Vytvoríme finálnu URL. Ak je 'image' definovaný (poslaný zo stránky), použije sa.
@@ -22,6 +24,7 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <ViewTransitions />
     
     <title>{title}</title>
     <meta name="description" content={description}>
@@ -31,6 +34,7 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href}>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -77,7 +81,8 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
 }
 </script>
 </head>
-<body>
+<body data-page={pageType}>
+    <div id="custom-cursor"></div>
     <slot />
     <script src="../scripts/script.js"></script>
 </body>

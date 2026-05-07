@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('astro:page-load', function () {
 
     // --- VÝBER VŠETKÝCH POTREBNÝCH ELEMENTOV ---
     const body = document.body;
@@ -146,6 +146,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    // --- 6. CUSTOM CURSOR LOGIC ---
+    const customCursor = document.getElementById('custom-cursor');
+    if (customCursor) {
+        // Track mouse movement (použijeme onmousemove, aby nevznikali duplikáty pri navigácii)
+        document.onmousemove = (e) => {
+            // Hardware accelerated position update
+            customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        };
+
+        // Interaktívne prvky, na ktorých sa kurzor zväčší (hover)
+        const interactiveSelectors = 'a, button, .creation-box, .bx, .theme-toggle-icon, .footer-link';
+        
+        // Funkcia na re-bindovanie eventov
+        const bindCursorHover = () => {
+            document.querySelectorAll(interactiveSelectors).forEach(el => {
+                if (!el.dataset.cursorBound) {
+                    el.addEventListener('mouseenter', () => customCursor.classList.add('cursor-hover'));
+                    el.addEventListener('mouseleave', () => customCursor.classList.remove('cursor-hover'));
+                    el.dataset.cursorBound = 'true';
+                }
+            });
+        };
+        
+        bindCursorHover();
+    }
+
     // ==========================================================
     // --- FUNKCIE PRE SCROLLOVANIE A ZMENU VEĽKOSTI OKNA ---
     // ==========================================================
@@ -176,28 +202,101 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const handleHeaderScroll = () => {
         if (header) {
-            const desktopBreakpoint = 992;
-            if (window.innerWidth >= desktopBreakpoint) {
-                if (window.scrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
         }
     };
 
+    const handleFooterMacroScroll = () => {
+        const footerMacro = document.getElementById('footer-macro');
+        if (footerMacro) {
+            const rect = footerMacro.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            if (rect.top < windowHeight && rect.bottom > 0) {
+                // Výpočet: 0 keď sa text začne objavovať zdola, 1 keď je celý na obrazovke
+                let progress = (windowHeight - rect.top) / (rect.height || 100);
+
+                // Povolíme hodnoty medzi 0 a trochu viac ako 1
+                progress = Math.max(0, progress);
+
+                // Výraznejší efekt zväčšovania (až 30%)
+                const scale = 1 + (progress * 0.3);
+                footerMacro.style.transform = `scale(${scale})`;
+            }
+        }
+    };
+
+    const handleHeroParallax = () => {
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            const scrollY = window.scrollY;
+            const heroHeight = hero.offsetHeight;
+            if (scrollY > heroHeight) return;
+
+            const heroVideo = hero.querySelector('.hero-video');
+            const heroContent = hero.querySelector('.hero-content');
+            const heroOverlay = hero.querySelector('.hero-overlay');
+
+            if (heroVideo) {
+                // Parallax pre obrázok (posúva sa pomalšie ako zvyšok stránky)
+                heroVideo.style.transform = `translateY(${scrollY * 0.45}px)`;
+            }
+            if (heroContent) {
+                // Jemnejší parallax pre text s postupným zánikom (fade out)
+                heroContent.style.transform = `translateY(${scrollY * 0.3}px)`;
+                heroContent.style.opacity = Math.max(0, 1 - (scrollY / (heroHeight * 0.7)));
+            }
+            if (heroOverlay) {
+                // Postupné stmavovanie pre silný filmový "fade" efekt
+                const darkness = Math.min(scrollY / heroHeight, 0.85);
+                heroOverlay.style.backgroundColor = `rgba(0, 0, 0, ${darkness})`;
+            }
+        }
+    };
+
+    // --- 7. MOBILNÝ SLIDER (BENTO GRID NA MOBILOCH) ---
+    const sliderWrapper = document.getElementById('creations-slider');
+    const sliderThumb = document.getElementById('slider-thumb');
+    
+    if (sliderWrapper && sliderThumb) {
+        const updateSliderThumb = () => {
+            const maxScrollLeft = sliderWrapper.scrollWidth - sliderWrapper.clientWidth;
+            if (maxScrollLeft > 0) {
+                // Posun thumbu: šírka thumbu je 30%, čiže sa posúva maximálne o zvyšných 70% až do cca zrkadlového okraja
+                const scrollPercentage = sliderWrapper.scrollLeft / maxScrollLeft;
+                // Posun vypočítame vzhľadom k šírke kontajnera thumbu
+                sliderThumb.style.transform = `translateX(${scrollPercentage * 230}%)`; 
+                // 230% posunie 30% element na samotný okraj tracku (3.3 * 30% = cca 100%, posúvame samotnú ľavú hranu o cca 233% jej vlastnej šírky aby koniec lícoval).
+            }
+        };
+
+        // Aktualizuj na začiatku a pri posune
+        sliderWrapper.addEventListener('scroll', updateSliderThumb, { passive: true });
+        // Počkaj na načítanie fontov a obrázkov, potom uprav
+        setTimeout(updateSliderThumb, 100);
+        window.addEventListener('resize', updateSliderThumb);
+    }
+
     // Event listenery zostávajú, lebo vnútorná logika funkcií je už ošetrená
-    window.addEventListener('scroll', () => {
+    // Používame .onscroll a .onresize namiesto addEventListener, aby sme predišli duplikácii pri astro:page-load
+    window.onscroll = () => {
         activateNavOnScroll();
         handleScrollTopBtn();
         handleHeaderScroll();
-    });
-    window.addEventListener('resize', handleHeaderScroll);
-    
+        handleFooterMacroScroll();
+        handleHeroParallax();
+    };
+    window.onresize = () => {
+        handleHeaderScroll();
+        handleFooterMacroScroll();
+    };
+
     // Prvotné spustenie
     activateNavOnScroll();
     handleHeaderScroll();
+    handleFooterMacroScroll();
+    handleHeroParallax();
 });

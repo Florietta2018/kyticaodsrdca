@@ -4,12 +4,12 @@ import { defineCollection, z } from 'astro:content';
 // Vytvoríme definíciu (schému) pre našu kolekciu príspevkov "blog"
 const blogCollection = defineCollection({
   type: 'content', // Znamená, že príspevky budú písané v Markdown alebo MDX
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),                                  // Nadpis (povinný text)
     description: z.string(),                            // Krátky popis (povinný text)
     pubDate: z.date(),                                  // Dátum publikácie (povinný dátum)
     image: z.object({
-      url: z.string(),                                  // URL adresa obrázku (povinný text)
+      url: image(),                                     // URL adresa obrázku (bude spracovaná cez astro:assets)
       alt: z.string(),                                  // Alternatívny text pre obrázok (povinný text)
     }),
     tags: z.array(z.string()),                          // Značky (nepovinné pole textových reťazcov)

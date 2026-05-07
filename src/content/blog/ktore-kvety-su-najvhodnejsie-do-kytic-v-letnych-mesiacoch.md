@@ -3,7 +3,7 @@ title: "Ktoré kvety sú najvhodnejšie do kytíc v letných mesiacoch?"
 description: "Letné kvety prinášajú do interiéru aj záhrady farby, vôňu a odolnosť. Zistite, ktoré druhy v lete vydržia najdlhšie a čo im vyhovuje."
 pubDate: 2025-07-01
 image:
-  url: "/img/farebne-kvety.jpg"
+  url: "../../assets/img/farebne-kvety.jpg"
   alt: "Farebná letná kytica s margarétkami, slnečnicami a levanduľou"
 tags: ["Letné kvety", "Tipy", "Sezónne"]
 

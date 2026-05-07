@@ -3,7 +3,7 @@ title: "Ako sa starať o kyticu, aby nám vydržala čo najdlhšie?"
 description: "Objavte najlepšie tipy a triky, ako udržať vaše kytice krásne po dlhú dobu."
 pubDate: 2025-07-01
 image:
-  url: "/img/kytica.jpg"
+  url: "../../assets/img/kytica.jpg"
   alt: "Kytica jarných kvetov vo váze"
 tags: ["Starostlivosť", "Sezónne", "Tipy"]
 ---

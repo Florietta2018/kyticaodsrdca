@@ -13,7 +13,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 const pageTitle = "Blog | Kytica od srdca";
 const pageDescription = "Novinky, tipy a inšpirácie zo sveta kvetov a aranžovania.";
 ---
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} pageType="blog">
  <Header />
  <main>
   <section class="blog-archive">
@@ -59,12 +59,28 @@ const pageDescription = "Novinky, tipy a inšpirácie zo sveta kvetov a aranžov
   margin-top: 6rem;
  }
 
- /* Cielený štýl pre tlačidlo na tejto stránke v light mode */
+ /* Premium ghost dizajn pre tlačidlo späť */
+ #blog-index-back-btn {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  backdrop-filter: none;
+ }
+ #blog-index-back-btn:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border-color: var(--accent-color);
+ }
+
+ /* V light mode potrebuje len o čosi viditeľnejší border, inak ostáva elegantné transparentné */
  body.light-mode #blog-index-back-btn {
-  color: var(--accent-color);
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(0, 0, 0, 0.2);
  }
  body.light-mode #blog-index-back-btn:hover {
   background-color: var(--accent-color);
   color: var(--bg-color);
+  border-color: var(--accent-color);
  }
 </style>
