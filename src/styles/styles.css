@@ -1479,25 +1479,42 @@ body.light-mode .creation-box.online-card:hover {
 }
 
 .modal-content {
-    max-width: 90vw;
-    max-height: 90vh;
+    max-width: 95vw;
+    max-height: 95vh;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 95vh;
     object-fit: contain;
     border-radius: var(--border-radius-md);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
 #modal-close {
-    position: absolute;
-    top: -4rem;
-    right: -2rem;
-    font-size: 4rem;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 2.5rem;
     color: #fff;
     cursor: pointer;
+    background: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+    z-index: 2001;
+}
+
+#modal-close:hover {
+    background: rgba(0,0,0,0.8);
 }
 
 .menu-overlay {
