@@ -155,6 +155,12 @@ section {
     transform: translateY(0);
 }
 
+/* Fix: Vnútri slidera zrušíme posun, aby nám to pri swipovaní nenaťahovalo kontajner a neskákalo */
+.slider-wrapper .fade-in-element,
+.slider-wrapper .fade-in-element.is-visible {
+    transform: none !important;
+}
+
 .heading {
     text-align: center;
     font-family: var(--font-heading);
