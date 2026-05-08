@@ -416,24 +416,27 @@ a.logo img {
 .footer-premium {
     position: relative;
     padding-top: 8rem;
-    padding-bottom: 8rem; /* Rovnaký padding hore aj dole pre dokonalú symetriu */
+    padding-bottom: 4rem; /* Zredukované pre moderný spodný okraj */
     overflow: hidden;
     background: transparent;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between; /* Elementy sa rozmiestnia na okraje a makrotext bude presne v strede */
-    min-height: 40vh; /* Vynútenie minimálnej výšky pre lepšie zobrazenie animácie */
+    align-items: stretch; /* Namiesto center, aby sme mohli zarovnávať k okrajom */
+    justify-content: space-between; 
+    min-height: 40vh; 
 }
 
 .footer-top {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between; /* Rozhodí odkazy a copyright (ak by sme ich dali do jedného riadku, no zatiaľ len roztiahne) */
     align-items: center;
-    gap: 3rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5%;
     position: relative;
     z-index: 10;
-    margin: 0;
 }
 
 .footer-links {
@@ -475,11 +478,12 @@ a.logo img {
 
 .footer-copyright {
     font-family: var(--font-body);
-    font-size: 1.4rem;
+    font-size: 1.2rem; /* Jemnejšie a menšie */
     letter-spacing: 1px;
-    opacity: 0.7;
+    opacity: 0.15; /* Ešte viac stmavené, aby nesvietilo */
     text-align: center;
-    margin-top: 0; /* Odsadenie rieši margin-bottom na makro kontajneri */
+    width: 100%;
+    margin-top: 2rem;
     position: relative;
     z-index: 10;
     color: var(--text-color);
@@ -496,10 +500,10 @@ a.logo img {
 
 .footer-macro-text {
     font-family: var(--font-heading);
-    font-size: clamp(3rem, 9vw, 15rem); /* Výraznejšie zmenšenie pre mobilnú verziu, aby bolo vidieť takmer celý názov */
-    line-height: 0.8;
-    color: var(--text-color);
-    opacity: 0.04;
+    font-size: clamp(2.5rem, 6vw, 6rem); /* Pre mobily a tablety udrží text pekne vnútri */
+    line-height: 0.75;
+    color: transparent; /* Priehľadný text */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15); /* Štýlová jemná línia (Outline efekt) */
     white-space: nowrap;
     text-transform: uppercase;
     transform-origin: center; /* Zväčšuje sa z absolútneho stredu rovnomerne nahor aj nadol */
@@ -509,8 +513,15 @@ a.logo img {
     will-change: transform;
 }
 
+/* Pre desktop urobíme text taký veľký, aby presne prvé a posledné písmeno jemne pretekali */
+@media (min-width: 1024px) {
+    .footer-macro-text {
+        font-size: clamp(8rem, 10vw, 18rem); 
+    }
+}
+
 body.light-mode .footer-macro-text {
-    opacity: 0.03;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.15);
 }
 
 /* -------------------------------------------
@@ -883,6 +894,72 @@ body.light-mode .intro-medallion {
         grid-row: span 1;
     }
 
+    /* Nové položky pre "Zobraziť ďalšie" - Dávka 1 */
+    .slider-wrapper .creation-box:nth-child(9) { grid-column: span 2; grid-row: span 2; }
+    .slider-wrapper .creation-box:nth-child(10) { grid-column: span 1; grid-row: span 1; }
+    .slider-wrapper .creation-box:nth-child(11) { grid-column: span 1; grid-row: span 1; }
+    .slider-wrapper .creation-box:nth-child(12) { grid-column: span 2; grid-row: span 1; }
+
+    /* Nové položky - Dávka 2 */
+    .slider-wrapper .creation-box:nth-child(13) { grid-column: span 2; grid-row: span 2; }
+    .slider-wrapper .creation-box:nth-child(14) { grid-column: span 1; grid-row: span 1; }
+    .slider-wrapper .creation-box:nth-child(15) { grid-column: span 1; grid-row: span 1; }
+    .slider-wrapper .creation-box:nth-child(16) { grid-column: span 2; grid-row: span 1; }
+
+    /* Nové položky - Dávka 3 */
+    .slider-wrapper .creation-box:nth-child(17) { grid-column: span 2; grid-row: span 2; }
+    .slider-wrapper .creation-box:nth-child(18) { grid-column: span 1; grid-row: span 1; }
+    .slider-wrapper .creation-box:nth-child(19) { grid-column: span 1; grid-row: span 1; }
+    .slider-wrapper .creation-box:nth-child(20) { grid-column: span 2; grid-row: span 1; }
+
+    .creation-box.hidden-desktop {
+        display: none;
+    }
+
+    .slider-wrapper .creation-box.hidden-desktop.visible-batch {
+        display: block;
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .show-more-wrapper {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-bento-more {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--text-color);
+        padding: 1.4rem 5rem;
+        font-family: var(--font-body);
+        font-size: 1.2rem;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        border-radius: 0;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    body.light-mode .btn-bento-more {
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-bento-more:hover {
+        background: var(--accent-color);
+        border-color: var(--accent-color);
+        color: #fff;
+        letter-spacing: 0.3em;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
     .info-cards-wrapper .creation-box:nth-child(1) {
         grid-column: span 1;
         grid-row: span 1;
@@ -895,6 +972,10 @@ body.light-mode .intro-medallion {
 }
 
 @media (max-width: 1200px) {
+    .desktop-only {
+        display: none !important;
+    }
+
     .creations-container {
         display: flex;
         flex-direction: column;
@@ -910,9 +991,9 @@ body.light-mode .intro-medallion {
         padding-bottom: 2rem; /* Priestor pre tieň */
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none;  /* IE and Edge */
-        /* Odstránime margin negatívny hack, proste posunieme padding */
         margin: 0 -5%; 
         padding: 0 5% 2rem 5%;
+        touch-action: pan-y; /* Zabraňuje diagonálnemu scrollovaniu pri swipovaní */
     }
     
     .slider-wrapper::-webkit-scrollbar {
@@ -1014,10 +1095,6 @@ body.light-mode .intro-medallion {
     transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.creation-box:hover img {
-    transform: scale(1.05);
-}
-
 .creation-layer {
     position: absolute;
     inset: 0;
@@ -1032,10 +1109,6 @@ body.light-mode .intro-medallion {
     align-items: flex-start;
 }
 
-.creation-box:hover .creation-layer {
-    opacity: 1;
-}
-
 .creation-layer h4 {
     font-family: var(--font-heading);
     font-size: 2.4rem;
@@ -1045,10 +1118,6 @@ body.light-mode .intro-medallion {
     transform: translateY(20px);
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s;
     margin: 0;
-}
-
-.creation-box:hover .creation-layer h4 {
-    transform: translateY(0);
 }
 
 .creation-layer::before {
@@ -1063,9 +1132,23 @@ body.light-mode .intro-medallion {
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.creation-box:hover .creation-layer::before {
-    transform: scaleX(1);
-    transition-delay: 0.2s;
+@media (hover: hover) {
+    .creation-box:hover img {
+        transform: scale(1.05);
+    }
+
+    .creation-box:hover .creation-layer {
+        opacity: 1;
+    }
+
+    .creation-box:hover .creation-layer h4 {
+        transform: translateY(0);
+    }
+
+    .creation-box:hover .creation-layer::before {
+        transform: scaleX(1);
+        transition-delay: 0.2s;
+    }
 }
 
 /* Info Cards in Bento Grid */
@@ -1364,6 +1447,33 @@ body.light-mode .creation-box.online-card:hover {
 .contact {
     background: transparent;
     text-align: center;
+}
+
+/* 
+===========================================
+   PLNE ŠIROKÝ FOOTER BLOK
+=========================================== 
+*/
+.unified-footer-wrapper {
+    background-color: var(--secondary-bg-color);
+    width: 100%;
+    position: relative;
+    transition: background-color 0.4s ease; /* Pre plynulý light/dark režim */
+}
+
+/* Zredukovaný top padding, lebo predel je hneď hore */
+.unified-footer-wrapper .footer-premium {
+    padding-top: 4rem;
+}
+
+/* Prémiová tenká strácajúca sa línia na úplnom vrchu pozadia */
+.footer-separator {
+    width: 100%;
+    max-width: 1200px;
+    height: 1px;
+    border: none;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
 }
 
 .contact p {

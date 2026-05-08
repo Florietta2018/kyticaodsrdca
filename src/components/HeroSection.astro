@@ -1,14 +1,16 @@
 ---
 // Súbor: src/components/HeroSection.astro
+import heroPosterDesktop from '../assets/img/obchodtit.webp';
+import heroPosterMobile from '../assets/img/obrazokobchodu.webp';
 ---
 <section class="hero" id="home">
     <!-- Desktop Video -->
-    <video class="hero-video hero-desktop" autoplay loop muted playsinline disablePictureInPicture>
+    <video class="hero-video hero-desktop" autoplay loop muted playsinline disablePictureInPicture poster={heroPosterDesktop.src}>
         <source src="https://kytica.b-cdn.net/Kyticadesktop.mp4" type="video/mp4" />
     </video>
     
     <!-- Mobile Video -->
-    <video class="hero-video hero-mobile" autoplay loop muted playsinline disablePictureInPicture>
+    <video class="hero-video hero-mobile" autoplay loop muted playsinline disablePictureInPicture poster={heroPosterMobile.src}>
         <source src="https://kytica.b-cdn.net/Kyticamob.mp4" type="video/mp4" />
     </video>
     <div class="hero-overlay"></div>

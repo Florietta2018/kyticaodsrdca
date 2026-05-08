@@ -10,6 +10,18 @@ import img5 from '../assets/img/k5.jpg';
 import img6 from '../assets/img/k6.jpg';
 import img7 from '../assets/img/k7.jpg';
 import img8 from '../assets/img/k9.jpg';
+import imgN1 from '../assets/img/n1.jpeg';
+import imgN2 from '../assets/img/n2.jpeg';
+import imgN3 from '../assets/img/n3.jpeg';
+import imgN4 from '../assets/img/n4.jpeg';
+import imgN5 from '../assets/img/n5.jpeg';
+import imgN6 from '../assets/img/n6.jpeg';
+import imgN7 from '../assets/img/n7.jpeg';
+import imgN8 from '../assets/img/n8.jpeg';
+import imgN9 from '../assets/img/n9.jpeg';
+import imgN10 from '../assets/img/n10.jpeg';
+import imgN11 from '../assets/img/n11.jpeg';
+import imgN12 from '../assets/img/n12.jpeg';
 ---
 <section class="creations" id="creations">
   
@@ -61,6 +73,65 @@ import img8 from '../assets/img/k9.jpg';
 <Image src={img8} alt="Kvetinárstvo Trenčianska Teplá" loading="lazy" />
 <div class="creation-layer"><h4>Voňavý pozdrav</h4></div>
   </div>
+  <!-- Batch 1 -->
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
+    <Image src={imgN1} alt="Nová inšpirácia 1" loading="lazy" />
+    <div class="creation-layer"><h4>Kytica na mieru</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
+    <Image src={imgN2} alt="Nová inšpirácia 2" loading="lazy" />
+    <div class="creation-layer"><h4>Svadobná výzdoba</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
+    <Image src={imgN3} alt="Nová inšpirácia 3" loading="lazy" />
+    <div class="creation-layer"><h4>Jarné prebudenie</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
+    <Image src={imgN4} alt="Nová inšpirácia 4" loading="lazy" />
+    <div class="creation-layer"><h4>Milé potešenie</h4></div>
+  </div>
+
+  <!-- Batch 2 -->
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
+    <Image src={imgN5} alt="Nová inšpirácia 5" loading="lazy" />
+    <div class="creation-layer"><h4>Pestré farby</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
+    <Image src={imgN6} alt="Nová inšpirácia 6" loading="lazy" />
+    <div class="creation-layer"><h4>Nežný dotyk</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
+    <Image src={imgN7} alt="Nová inšpirácia 7" loading="lazy" />
+    <div class="creation-layer"><h4>Elegantná krása</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
+    <Image src={imgN8} alt="Nová inšpirácia 8" loading="lazy" />
+    <div class="creation-layer"><h4>Jemná harmónia</h4></div>
+  </div>
+
+  <!-- Batch 3 -->
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
+    <Image src={imgN9} alt="Nová inšpirácia 9" loading="lazy" />
+    <div class="creation-layer"><h4>Sezónny výber</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
+    <Image src={imgN10} alt="Nová inšpirácia 10" loading="lazy" />
+    <div class="creation-layer"><h4>Lokálne kvety</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
+    <Image src={imgN11} alt="Nová inšpirácia 11" loading="lazy" />
+    <div class="creation-layer"><h4>Moderný aranžmán</h4></div>
+  </div>
+  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
+    <Image src={imgN12} alt="Nová inšpirácia 12" loading="lazy" />
+    <div class="creation-layer"><h4>Veľkolepá krása</h4></div>
+  </div>
+  </div>
+  
+  <!-- Tlačidlá zobraziť ďalšie / schovať (len pre desktop) -->
+  <div class="show-more-wrapper desktop-only fade-in-element">
+    <button class="btn-bento-more" id="showMoreBtn">Odhaľte viac inšpirácií</button>
+    <button class="btn-bento-more" id="showLessBtn" style="display: none;">Schovať inšpirácie</button>
   </div>
   
   <!-- Indikátor posunu (len pre mobil) -->
@@ -106,3 +177,46 @@ import img8 from '../assets/img/k9.jpg';
   </div> <!-- Ukončenie info-cards-wrapper -->
   </div> <!-- Ukončenie creations-container -->
  </section>
+
+ <script>
+  document.addEventListener('astro:page-load', () => {
+    const btnMore = document.getElementById('showMoreBtn');
+    const btnLess = document.getElementById('showLessBtn');
+    const wrapper = document.getElementById('creations-slider');
+    
+    let currentBatch = 0;
+    const maxBatch = 3;
+
+    if (btnMore && btnLess && wrapper) {
+      btnMore.addEventListener('click', () => {
+        if (currentBatch < maxBatch) {
+          currentBatch++;
+          const items = wrapper.querySelectorAll(`[data-batch="${currentBatch}"]`);
+          items.forEach(item => item.classList.add('visible-batch'));
+          
+          btnLess.style.display = 'inline-block';
+          
+          if (currentBatch === maxBatch) {
+            btnMore.style.display = 'none';
+          }
+        }
+      });
+
+      btnLess.addEventListener('click', () => {
+        if (currentBatch > 0) {
+          const items = wrapper.querySelectorAll(`[data-batch="${currentBatch}"]`);
+          items.forEach(item => item.classList.remove('visible-batch'));
+          
+          currentBatch--;
+          btnMore.style.display = 'inline-block';
+          
+          if (currentBatch === 0) {
+            btnLess.style.display = 'none';
+            // Jemne odscrollovať vyššie k nadpisu galérie, keď zbalíme všetko
+            document.getElementById('creations')?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    }
+  });
+</script>
