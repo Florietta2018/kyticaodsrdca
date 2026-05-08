@@ -993,7 +993,6 @@ body.light-mode .intro-medallion {
         -ms-overflow-style: none;  /* IE and Edge */
         margin: 0 -5%; 
         padding: 0 5% 2rem 5%;
-        touch-action: pan-y; /* Zabraňuje diagonálnemu scrollovaniu pri swipovaní */
     }
     
     .slider-wrapper::-webkit-scrollbar {
