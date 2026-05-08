@@ -2123,6 +2123,18 @@ body.light-mode .nav-wrapper.active ~ .mobile-icons .theme-toggle-icon {
 body.light-mode .nav-wrapper.active .navbar a {
     color: var(--text-color) !important;
 }
+
+/* Skrytie textu pri logu, keď je mobilné menu otvorené, aby sa neprekrýval s odkazmi */
+.header:has(.nav-wrapper.active) .logo-text {
+    opacity: 0 !important;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+/* Fallback pre staršie prehliadače */
+.nav-wrapper.active ~ .logo .logo-text {
+    opacity: 0 !important;
+}
+
 body.light-mode .nav-wrapper.active .navbar a.nav-btn {
     border-color: rgba(0, 0, 0, 0.2) !important;
 }
