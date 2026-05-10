@@ -1725,37 +1725,6 @@ body.light-mode .creation-box.online-card:hover {
     background: rgba(0, 0, 0, 0.8);
 }
 
-.modal-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 3rem;
-    color: rgba(255, 255, 255, 0.4);
-    cursor: pointer;
-    background: transparent;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s ease, transform 0.3s ease;
-    z-index: 2001;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.modal-nav:hover {
-    color: rgba(255, 255, 255, 0.9);
-    transform: translateY(-50%) scale(1.1);
-}
-
-#modal-prev {
-    left: 1rem;
-}
-
-#modal-next {
-    right: 1rem;
-}
-
 .menu-overlay {
     position: fixed;
     top: 0;

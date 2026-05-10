@@ -107,8 +107,6 @@ document.addEventListener('astro:page-load', function () {
 
     // --- 4. FUNKCIONALITA MODÁLNEJ GALÉRIE ---
     if (modal && modalImg && modalClose && creationBoxes.length > 0) {
-        const modalPrev = document.getElementById('modal-prev');
-        const modalNext = document.getElementById('modal-next');
         let currentImageIndex = 0;
         let galleryImages = [];
 
@@ -157,9 +155,6 @@ document.addEventListener('astro:page-load', function () {
         });
 
         modalClose.addEventListener('click', closeModal);
-        
-        if (modalPrev) modalPrev.addEventListener('click', prevImage);
-        if (modalNext) modalNext.addEventListener('click', nextImage);
 
         modal.addEventListener('click', (e) => {
             // Zavri len ak sa kliklo mimo obrázka a šípok
