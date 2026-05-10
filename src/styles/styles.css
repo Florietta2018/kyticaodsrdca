@@ -1729,32 +1729,31 @@ body.light-mode .creation-box.online-card:hover {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 4rem;
-    color: #fff;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    background: transparent;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease;
     z-index: 2001;
     -webkit-tap-highlight-color: transparent;
 }
 
 .modal-nav:hover {
-    background: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 0.9);
     transform: translateY(-50%) scale(1.1);
 }
 
 #modal-prev {
-    left: 2rem;
+    left: 1rem;
 }
 
 #modal-next {
-    right: 2rem;
+    right: 1rem;
 }
 
 .menu-overlay {
