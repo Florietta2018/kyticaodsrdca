@@ -106,14 +106,35 @@ document.addEventListener('astro:page-load', function () {
 
 
     // --- 4. FUNKCIONALITA MODÁLNEJ GALÉRIE ---
-    // Táto časť je v poriadku
     if (modal && modalImg && modalClose && creationBoxes.length > 0) {
-        const openModal = (imgSrc) => {
-            modalImg.src = imgSrc;
+        const modalPrev = document.getElementById('modal-prev');
+        const modalNext = document.getElementById('modal-next');
+        let currentImageIndex = 0;
+        let galleryImages = [];
+
+        // Zhromaždíme všetky obrázky z bento gridu
+        creationBoxes.forEach(box => {
+            const img = box.querySelector('img');
+            if (img) galleryImages.push(img.src);
+        });
+
+        const showImage = (index) => {
+            if (index < 0) index = galleryImages.length - 1;
+            if (index >= galleryImages.length) index = 0;
+            currentImageIndex = index;
+            modalImg.src = galleryImages[currentImageIndex];
+        };
+
+        const nextImage = () => showImage(currentImageIndex + 1);
+        const prevImage = () => showImage(currentImageIndex - 1);
+
+        const openModal = (index) => {
+            showImage(index);
             modal.classList.add('active');
             body.classList.add('body-no-scroll');
             document.addEventListener('keydown', handleModalKeydown);
         };
+
         const closeModal = () => {
             modal.classList.remove('active');
             if (!navWrapper || !navWrapper.classList.contains('active')) {
@@ -121,19 +142,50 @@ document.addEventListener('astro:page-load', function () {
             }
             document.removeEventListener('keydown', handleModalKeydown);
         };
+
         const handleModalKeydown = (e) => {
             if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
         };
+
         creationBoxes.forEach(box => {
             box.addEventListener('click', () => {
                 const img = box.querySelector('img');
-                if (img) openModal(img.src);
+                if (img) openModal(galleryImages.indexOf(img.src));
             });
         });
+
         modalClose.addEventListener('click', closeModal);
+        
+        if (modalPrev) modalPrev.addEventListener('click', prevImage);
+        if (modalNext) modalNext.addEventListener('click', nextImage);
+
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+            // Zavri len ak sa kliklo mimo obrázka a šípok
+            if (e.target === modal || e.target.classList.contains('modal-content')) {
+                closeModal();
+            }
         });
+
+        // Swipe (Touch) podpora
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        modal.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        modal.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        const handleSwipe = () => {
+            const threshold = 50; // minimálna vzdialenosť pre swipe
+            if (touchEndX < touchStartX - threshold) nextImage(); // swipe doľava -> ďalší obrázok
+            if (touchEndX > touchStartX + threshold) prevImage(); // swipe doprava -> predchádzajúci obrázok
+        };
     }
 
 
