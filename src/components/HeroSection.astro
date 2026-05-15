@@ -5,13 +5,15 @@ import heroPosterMobile from '../assets/img/obrazokobchodu.webp';
 ---
 <section class="hero" id="home">
     <!-- Desktop Video -->
-    <video class="hero-video hero-desktop" autoplay loop muted playsinline disablePictureInPicture poster={heroPosterDesktop.src}>
+    <video class="hero-video hero-desktop" autoplay loop muted playsinline disablePictureInPicture poster="https://kytica.b-cdn.net/Kyticadesktop.webp" style={`background: url('${heroPosterDesktop.src}') center/cover no-repeat;`}>
         <source src="https://kytica.b-cdn.net/Kyticadesktop.mp4" type="video/mp4" />
+        <img src={heroPosterDesktop.src} alt="Kvetinárstvo Kytica od srdca" style="width: 100%; height: 100%; object-fit: cover;" />
     </video>
     
     <!-- Mobile Video -->
-    <video class="hero-video hero-mobile" autoplay loop muted playsinline disablePictureInPicture poster={heroPosterMobile.src}>
+    <video class="hero-video hero-mobile" autoplay loop muted playsinline disablePictureInPicture poster="https://kytica.b-cdn.net/Kyticamob.webp" style={`background: url('${heroPosterMobile.src}') center/cover no-repeat;`}>
         <source src="https://kytica.b-cdn.net/Kyticamob.mp4" type="video/mp4" />
+        <img src={heroPosterMobile.src} alt="Kvetinárstvo Kytica od srdca" style="width: 100%; height: 100%; object-fit: cover;" />
     </video>
     <div class="hero-overlay"></div>
 
