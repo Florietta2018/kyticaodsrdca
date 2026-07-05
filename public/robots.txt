@@ -7,4 +7,4 @@ User-agent: facebookexternalhit
 Allow: /
 
 # Odkaz na sitemap
-Sitemap: https://kyticaodsrdca.sk/sitemap-0.xml
+Sitemap: https://kyticaodsrdca.sk/sitemap-index.xml

@@ -1,6 +1,6 @@
 ---
 // FINÁLNA VERZIA: src/layouts/Layout.astro
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/styles.css';
 
 
@@ -24,7 +24,7 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <ViewTransitions />
+    <ClientRouter />
     
     <title>{title}</title>
     <meta name="description" content={description}>
@@ -47,6 +47,7 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
     <meta property="og:title" content={title}>
     <meta property="og:description" content={description}>
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Kytica od srdca">
     <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href}>
     
     {/* ZMENA: Použili sme novú premennú 'finalImageURL' */}
@@ -70,14 +71,40 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
 {
   "@context": "https://schema.org",
   "@type": "Florist",
+  "@id": "https://kyticaodsrdca.sk/#kvetinarstvo",
   "name": "Kytica od srdca",
   "url": "https://kyticaodsrdca.sk",
-  "logo": "https://kyticaodsrdca.sk/img/obrazokobchodu.webp",
+  "image": "https://kyticaodsrdca.sk/img/obrazokobchodu.webp",
+  "logo": "https://kyticaodsrdca.sk/img/LOGO_KRUH-pinkwhite.png",
+  "telephone": "+421940181839",
+  "email": "kyticaodsrdca@gmail.com",
   "address": {
     "@type": "PostalAddress",
+    "streetAddress": "Milana Rastislava Štefánika 360",
     "addressLocality": "Trenčianska Teplá",
+    "postalCode": "914 01",
     "addressCountry": "SK"
-  }
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 48.9341249,
+    "longitude": 18.1153304
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "08:30",
+      "closes": "15:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "09:00",
+      "closes": "11:30"
+    }
+  ],
+  "sameAs": ["https://www.facebook.com/kyticaodsrdca/?locale=sk_SK"]
 }
 </script>
 </head>
