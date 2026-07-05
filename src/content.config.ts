@@ -1,9 +1,10 @@
-// Súbor: src/content/config.ts
+// Súbor: src/content.config.ts
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 // Vytvoríme definíciu (schému) pre našu kolekciu príspevkov "blog"
 const blogCollection = defineCollection({
-  type: 'content', // Znamená, že príspevky budú písané v Markdown alebo MDX
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: ({ image }) => z.object({
     title: z.string(),                                  // Nadpis (povinný text)
     description: z.string(),                            // Krátky popis (povinný text)

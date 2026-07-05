@@ -28,7 +28,7 @@ return '';
 };
 ---
 <article class="blog-post-card fade-in-element">
-<a href={`/blog/${post.slug}/`} class="post-card-image-link">
+<a href={`/blog/${post.id}/`} class="post-card-image-link">
 <Image src={image.url} alt={image.alt} class="post-card-image" loading="lazy" />
 </a>
 
@@ -40,7 +40,7 @@ return '';
 ))}
 </div>
 <h3 class="post-card-title">
-<a href={`/blog/${post.slug}/`}>{title}</a>
+<a href={`/blog/${post.id}/`}>{title}</a>
 </h3>
 </div>
 

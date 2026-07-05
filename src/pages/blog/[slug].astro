@@ -1,6 +1,6 @@
 ---
 // FINÁLNA VERZIA: src/pages/blog/[slug].astro
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
@@ -9,7 +9,7 @@ import Footer from '../../components/Footer.astro';
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
   return allPosts.map(post => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
@@ -18,7 +18,7 @@ type Props = {
   post: CollectionEntry<'blog'>;
 }
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 // TOTO JE SPRÁVNE: Automaticky načíta celú a správnu URL aktuálneho článku
 const shareUrl = Astro.url.href; 
