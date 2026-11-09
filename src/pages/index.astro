@@ -1,43 +1,34 @@
 ---
 // Súbor: src/pages/index.astro
-
-// 1. Importujeme hlavný Layout a všetky komponenty, ktoré chceme použiť.
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
+import AtelierSection from '../components/AtelierSection.astro';
 import CreationsSection from '../components/CreationsSection.astro';
-// import StorySection from '../components/StorySection.astro'; // Deaktivované
-import BlogPreviewSection from '../components/BlogPreviewSection.astro';
+import QuoteSection from '../components/QuoteSection.astro';
+import OnlineSection from '../components/OnlineSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import Footer from '../components/Footer.astro';
 import ScrollTopBtn from '../components/ScrollTopBtn.astro';
 import GalleryModal from '../components/GalleryModal.astro';
-import MenuOverlay from '../components/MenuOverlay.astro';
 
-// 2. Definuje sa titulok a popis pre túto konkrétnu stránku.
-const pageTitle = "Kytica od srdca | Vaše Kvetinárstvo v Trenčianskej Teplej | Donáška Kvetov";
-const pageDescription = "Objavte Kytica od srdca – vaše lokálne kvetinárstvo v Trenčianskej Teplej. Ponúkame čerstvé kvety, aranžmány na mieru, svadobné kytice a donášku kvetov.";
+// Titulok do ~60 znakov a popis do ~155 znakov, aby ich Google nezrezal.
+const pageTitle = "Kytica od srdca | Kvetinárstvo v Trenčianskej Teplej";
+const pageDescription = "Kvetinárstvo v Trenčianskej Teplej: kytice a boxy na mieru, svadobná floristika, smútočné vence, izbové rastliny a darčeky. Vyberte si aj v online ponuke.";
 ---
 <Layout title={pageTitle} description={pageDescription}>
-    
     <Header />
 
-    <main>
+    <main id="obsah">
         <HeroSection />
+        <AtelierSection />
         <CreationsSection />
-        <!-- <StorySection /> -->
-        <BlogPreviewSection />
+        <QuoteSection />
+        <OnlineSection />
         <ContactSection />
     </main>
 
-    <!-- Plne široký luxusný Footer -->
-    <div class="unified-footer-wrapper">
-        <hr class="footer-separator" />
-        <Footer />
-    </div>
-
+    <Footer />
     <ScrollTopBtn />
     <GalleryModal />
-    <MenuOverlay />
-
 </Layout>

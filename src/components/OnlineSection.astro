@@ -1,0 +1,23 @@
+---
+// Súbor: src/components/OnlineSection.astro
+import { Image } from 'astro:assets';
+import imgMain from '../assets/img/n14.jpeg';
+import imgSecond from '../assets/img/n13.jpeg';
+import { CONTACT, nb } from '../data/site';
+---
+<section class="online" id="online">
+  <div class="online-inner">
+    <div class="online-photos">
+      <Image src={imgMain} alt="Ružová kytica s eukalyptom zabalená v ružovom papieri" class="online-photo-main" widths={[400, 700]} sizes="(max-width: 900px) 75vw, 34vw" loading="lazy" data-reveal="image" />
+      <!-- Menšia fotka sa pri skrolovaní posúva rýchlejšie, kompozícia tak dostane hĺbku -->
+      <Image src={imgSecond} alt="Pestrá lúčna kytica v pastelovom papieri" class="online-photo-second" widths={[300, 500]} sizes="(max-width: 900px) 42vw, 19vw" loading="lazy" data-reveal="image" data-reveal-delay="250" data-parallax="-0.09" data-parallax-layer />
+    </div>
+    <div class="online-text">
+      <h2 class="section-title" data-reveal="mask"><span class="reveal-inner">Kytica pripravená, kým prídete</span></h2>
+      <p data-reveal="up" data-reveal-delay="150">{nb('V online ponuke si vyberiete kyticu alebo darček z pohodlia domova. My ju uviažeme a vy si ju vyzdvihnete u nás v obchode bez čakania.')}</p>
+      <div data-reveal="up" data-reveal-delay="250">
+        <a href={CONTACT.online} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Prejsť do online ponuky</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,222 +1,92 @@
 ---
 // Súbor: src/components/CreationsSection.astro
-import { Image } from 'astro:assets';
-import imgSpolocna from '../assets/img/spolocna.webp';
-import img1 from '../assets/img/k1.jpg';
-import img2 from '../assets/img/k2.jpg';
-import img3 from '../assets/img/k3.jpg';
-import img4 from '../assets/img/k8.jpg';
-import img5 from '../assets/img/k5.jpg';
-import img6 from '../assets/img/k6.jpg';
-import img7 from '../assets/img/k7.jpg';
-import img8 from '../assets/img/k9.jpg';
-import imgN1 from '../assets/img/n1.jpeg';
-import imgN2 from '../assets/img/n2.jpeg';
-import imgN3 from '../assets/img/n3.jpeg';
-import imgN4 from '../assets/img/n4.jpeg';
-import imgN5 from '../assets/img/n5.jpeg';
-import imgN6 from '../assets/img/n6.jpeg';
-import imgN7 from '../assets/img/n7.jpeg';
-import imgN8 from '../assets/img/n8.jpeg';
-import imgN9 from '../assets/img/n9.jpeg';
-import imgN10 from '../assets/img/n10.jpeg';
-import imgN11 from '../assets/img/n11.jpeg';
-import imgN12 from '../assets/img/n12.jpeg';
+import { Image, getImage } from 'astro:assets';
+import { nb } from '../data/site';
+import k1 from '../assets/img/k1.jpg';
+import k2 from '../assets/img/k2.jpg';
+import k3 from '../assets/img/k3.jpg';
+import k5 from '../assets/img/k5.jpg';
+import k6 from '../assets/img/k6.jpg';
+import k7 from '../assets/img/k7.jpg';
+import k8 from '../assets/img/k8.jpg';
+import k9 from '../assets/img/k9.jpg';
+import n1 from '../assets/img/n1.jpeg';
+import n2 from '../assets/img/n2.jpeg';
+import n3 from '../assets/img/n3.jpeg';
+import n4 from '../assets/img/n4.jpeg';
+import n5 from '../assets/img/n5.jpeg';
+import n6 from '../assets/img/n6.jpeg';
+import n7 from '../assets/img/n7.jpeg';
+import n8 from '../assets/img/n8.jpeg';
+import n9 from '../assets/img/n9.jpeg';
+import n10 from '../assets/img/n10.jpeg';
+import n11 from '../assets/img/n11.jpeg';
+import n12 from '../assets/img/n12.jpeg';
+
+// batch 0 je viditeľný hneď, ďalšie sa na počítači odkrývajú tlačidlom.
+const items = [
+  { src: k1, caption: 'Náš ateliér', batch: 0 },
+  { src: k2, caption: 'Kvetinový box', batch: 0 },
+  { src: k3, caption: 'Svadobný sen', batch: 0 },
+  { src: k8, caption: 'Čistá elegancia', batch: 0 },
+  { src: k5, caption: 'Prírodná krása', batch: 0 },
+  { src: k6, caption: 'Kvetinová radosť', batch: 0 },
+  { src: k7, caption: 'Farebná harmónia', batch: 0 },
+  { src: k9, caption: 'Voňavý pozdrav', batch: 0 },
+  { src: n1, caption: 'Kytica na mieru', batch: 1 },
+  { src: n2, caption: 'Svadobná výzdoba', batch: 1 },
+  { src: n3, caption: 'Jarné prebudenie', batch: 1 },
+  { src: n4, caption: 'Milé potešenie', batch: 1 },
+  { src: n5, caption: 'Pestré farby', batch: 2 },
+  { src: n6, caption: 'Nežný dotyk', batch: 2 },
+  { src: n7, caption: 'Elegantná krása', batch: 2 },
+  { src: n8, caption: 'Jemná harmónia', batch: 2 },
+  { src: n9, caption: 'Sezónny výber', batch: 3 },
+  { src: n10, caption: 'Lokálne kvety', batch: 3 },
+  { src: n11, caption: 'Moderný aranžmán', batch: 3 },
+  { src: n12, caption: 'Veľkolepá krása', batch: 3 },
+];
+
+// Väčšia verzia každej fotky pre lightbox.
+const gallery = await Promise.all(
+  items.map(async (item) => ({
+    ...item,
+    full: (await getImage({ src: item.src, width: 1400, format: 'webp' })).src,
+  }))
+);
+const maxBatch = Math.max(...items.map((i) => i.batch));
 ---
 <section class="creations" id="creations">
-  
-  <div class="intro-container fade-in-element">
-    <div class="intro-medallion">
-      <Image src={imgSpolocna} alt="Tím Kytica od srdca" loading="lazy" />
-    </div>
-    <h2 class="intro-heading">Viazané s láskou a dušou</h2>
-    <div class="intro-text">
-      <p>Každá kytica, ktorú vytvoríme, nesie v sebe viac než kvety — nesie pozornosť, čas a rešpekt k prírode. <span class="highlight">Sezónne. Lokálne. Na mieru.</span></p>
-      <p class="signature">Navštívte nás v Trenčianskej Teplej a odneste si domov kúsok krásy.</p>
-    </div>
+  <div class="creations-head">
+    <h2 class="section-title" data-reveal="mask"><span class="reveal-inner">Z našej dielne</span></h2>
+    <p data-reveal="up" data-reveal-delay="150">{nb('Kytice a aranžmány, ktoré u nás vznikli. Žiadna sa neopakuje, každú viažeme pre konkrétneho človeka a chvíľu.')}</p>
   </div>
 
-  <h2 class="heading fade-in-element">Naša <span>ponuka</span></h2>
- <div class="creations-container">
-  
-  <!-- Slider Wrapper pre mobil (na desktope display: contents) -->
-  <div class="slider-wrapper" id="creations-slider">
-   <div class="creation-box fade-in-element">
-<Image src={img1} alt="Kytica od srdca Trenčianska Teplá" loading="lazy" />
-<div class="creation-layer"><h4>Náš ateliér</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img2} alt="Výzdoba udalostí Kytica od srdca" loading="lazy" />
-<div class="creation-layer"><h4>Svadobná romanca</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img3} alt="Svadobné kytice Trenčianska Teplá" loading="lazy" />
-<div class="creation-layer"><h4>Svadobný sen</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img4} alt="Svadobné kvety kvetinárstvo Kytica od srdca" loading="lazy" />
-<div class="creation-layer"><h4>Čistá elegancia</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img5} alt="Kytice na mieru Trenčianska Teplá" loading="lazy" />
-<div class="creation-layer"><h4>Prírodná krása</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img6} alt="Kvety od srdca" loading="lazy" />
-<div class="creation-layer"><h4>Kvetinová radosť</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img7} alt="Kytice na mieru Trenčianska Teplá" loading="lazy" />
-<div class="creation-layer"><h4>Farebná harmónia</h4></div>
-  </div>
-  <div class="creation-box fade-in-element">
-<Image src={img8} alt="Kvetinárstvo Trenčianska Teplá" loading="lazy" />
-<div class="creation-layer"><h4>Voňavý pozdrav</h4></div>
-  </div>
-  <!-- Batch 1 -->
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
-    <Image src={imgN1} alt="Nová inšpirácia 1" loading="lazy" />
-    <div class="creation-layer"><h4>Kytica na mieru</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
-    <Image src={imgN2} alt="Nová inšpirácia 2" loading="lazy" />
-    <div class="creation-layer"><h4>Svadobná výzdoba</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
-    <Image src={imgN3} alt="Nová inšpirácia 3" loading="lazy" />
-    <div class="creation-layer"><h4>Jarné prebudenie</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="1">
-    <Image src={imgN4} alt="Nová inšpirácia 4" loading="lazy" />
-    <div class="creation-layer"><h4>Milé potešenie</h4></div>
+  <div class="gallery" id="gallery" data-max-batch={maxBatch}>
+    {gallery.map((item, i) => (
+      <button
+        type="button"
+        class={`gallery-item${item.batch > 0 ? ' is-extra' : ''}`}
+        data-batch={item.batch}
+        data-full={item.full}
+        data-caption={item.caption}
+        data-index={i}
+        data-reveal={item.batch === 0 ? 'image' : undefined}
+        data-reveal-delay={item.batch === 0 ? String((i % 4) * 70) : undefined}
+        aria-label={`Zväčšiť fotografiu: ${item.caption}`}
+      >
+        <Image src={item.src} alt={item.caption} widths={[360, 560, 800]} sizes="(max-width: 767px) 78vw, (max-width: 1200px) 33vw, 25vw" loading="lazy" />
+      </button>
+    ))}
   </div>
 
-  <!-- Batch 2 -->
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
-    <Image src={imgN5} alt="Nová inšpirácia 5" loading="lazy" />
-    <div class="creation-layer"><h4>Pestré farby</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
-    <Image src={imgN6} alt="Nová inšpirácia 6" loading="lazy" />
-    <div class="creation-layer"><h4>Nežný dotyk</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
-    <Image src={imgN7} alt="Nová inšpirácia 7" loading="lazy" />
-    <div class="creation-layer"><h4>Elegantná krása</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="2">
-    <Image src={imgN8} alt="Nová inšpirácia 8" loading="lazy" />
-    <div class="creation-layer"><h4>Jemná harmónia</h4></div>
+  <div class="gallery-progress" aria-hidden="true">
+    <div class="gallery-progress-track"><div class="gallery-progress-thumb" id="gallery-thumb"></div></div>
+    <span class="gallery-progress-hint">Potiahnite pre ďalšie fotky</span>
   </div>
 
-  <!-- Batch 3 -->
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
-    <Image src={imgN9} alt="Nová inšpirácia 9" loading="lazy" />
-    <div class="creation-layer"><h4>Sezónny výber</h4></div>
+  <div class="gallery-more">
+    <button type="button" class="btn btn-outline" id="gallery-more">Zobraziť ďalšie fotky</button>
+    <button type="button" class="btn-text" id="gallery-less" hidden>Zobraziť menej</button>
   </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
-    <Image src={imgN10} alt="Nová inšpirácia 10" loading="lazy" />
-    <div class="creation-layer"><h4>Lokálne kvety</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
-    <Image src={imgN11} alt="Nová inšpirácia 11" loading="lazy" />
-    <div class="creation-layer"><h4>Moderný aranžmán</h4></div>
-  </div>
-  <div class="creation-box hidden-desktop fade-in-element" data-batch="3">
-    <Image src={imgN12} alt="Nová inšpirácia 12" loading="lazy" />
-    <div class="creation-layer"><h4>Veľkolepá krása</h4></div>
-  </div>
-  </div>
-  
-  <!-- Tlačidlá zobraziť ďalšie / schovať (len pre desktop) -->
-  <div class="show-more-wrapper desktop-only fade-in-element">
-    <button class="btn-bento-more" id="showMoreBtn">Odhaľte viac inšpirácií</button>
-    <button class="btn-bento-more" id="showLessBtn" style="display: none;">Schovať inšpirácie</button>
-  </div>
-  
-  <!-- Indikátor posunu (len pre mobil) -->
-  <div class="slider-indicator-container">
-    <div class="slider-track">
-      <div class="slider-thumb" id="slider-thumb"></div>
-    </div>
-    <div class="swipe-hint">Potiahnite doprava &rarr;</div>
-  </div>
-
-  <!-- Obal pre info karty, aby mohli byť na tablete vedľa seba -->
-  <div class="info-cards-wrapper">
-    <!-- Info Card: Otváracie Hodiny a Kontakt -->
-    <div class="creation-box info-card fade-in-element">
-    <div class="info-card-content">
-      <h5>Zastavte sa u nás</h5>
-      <p class="address">M. R. Štefánika 360<br>Trenčianska Teplá</p>
-      <div class="divider"></div>
-      <ul class="hours">
-        <li><span>Po – Pi</span><span>8:30 – 15:00</span></li>
-        <li><span>So</span><span>9:00 – 11:30</span></li>
-        <li><span>Ne</span><span>Zatvorené</span></li>
-      </ul>
-      <div class="contact-links">
-        <a href="tel:+421940181839" aria-label="Zavolať"><i class='bx bxs-phone'></i></a>
-        <a href="mailto:kyticaodsrdca@gmail.com" aria-label="Napísať email"><i class='bx bxs-envelope'></i></a>
-        <a href="https://www.facebook.com/kyticaodsrdca/?locale=sk_SK" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class='bx bxl-facebook'></i></a>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Info Card: Online Ponuka -->
-  <a href="https://online.kyticaodsrdca.sk" target="_blank" rel="noopener noreferrer" class="creation-box info-card online-card fade-in-element">
-    <div class="info-card-content">
-      <div class="icon-wrapper">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
-      </div>
-      <h5>Objavte kúzlo<br>online</h5>
-      <p>Pozrite si našu ponuku z pohodlia domova a vyzdvihnite si kyticu, darček bez čakania.</p>
-      <span class="explore-link">Prejsť do Online ponuky <span>&rarr;</span></span>
-    </div>
-  </a>
-  </div> <!-- Ukončenie info-cards-wrapper -->
-  </div> <!-- Ukončenie creations-container -->
- </section>
-
- <script>
-  document.addEventListener('astro:page-load', () => {
-    const btnMore = document.getElementById('showMoreBtn');
-    const btnLess = document.getElementById('showLessBtn');
-    const wrapper = document.getElementById('creations-slider');
-    
-    let currentBatch = 0;
-    const maxBatch = 3;
-
-    if (btnMore && btnLess && wrapper) {
-      btnMore.addEventListener('click', () => {
-        if (currentBatch < maxBatch) {
-          currentBatch++;
-          const items = wrapper.querySelectorAll(`[data-batch="${currentBatch}"]`);
-          items.forEach(item => item.classList.add('visible-batch'));
-          
-          btnLess.style.display = 'inline-block';
-          
-          if (currentBatch === maxBatch) {
-            btnMore.style.display = 'none';
-          }
-        }
-      });
-
-      btnLess.addEventListener('click', () => {
-        if (currentBatch > 0) {
-          const items = wrapper.querySelectorAll(`[data-batch="${currentBatch}"]`);
-          items.forEach(item => item.classList.remove('visible-batch'));
-          
-          currentBatch--;
-          btnMore.style.display = 'inline-block';
-          
-          if (currentBatch === 0) {
-            btnLess.style.display = 'none';
-            // Jemne odscrollovať vyššie k nadpisu galérie, keď zbalíme všetko
-            document.getElementById('creations')?.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      });
-    }
-  });
-</script>
+</section>

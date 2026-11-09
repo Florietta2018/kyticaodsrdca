@@ -1,23 +1,67 @@
 ---
-// FINÁLNA VERZIA: src/layouts/Layout.astro
+// Súbor: src/layouts/Layout.astro
 import { ClientRouter } from 'astro:transitions';
 import '../styles/styles.css';
-
+import { SITE, CONTACT, HOURS } from '../data/site';
 
 interface Props {
 	title: string;
 	description: string;
-	image?: string; 
-    pageType?: string;
+	image?: string;      // obrázok pre zdieľanie, ideálne 1200 × 630 px
+	imageAlt?: string;
+	noindex?: boolean;   // napr. stránka 404
 }
 
-const { title, description, image, pageType = 'home' } = Astro.props;
+const {
+	title,
+	description,
+	image = '/og-image.jpg',
+	imageAlt = 'Interiér kvetinárstva Kytica od srdca s orchideami, rastlinami a darčekmi',
+	noindex = false,
+} = Astro.props;
 
-// --- NOVÁ ČASŤ: Logika pre dynamický obrázok ---
-// Vytvoríme finálnu URL. Ak je 'image' definovaný (poslaný zo stránky), použije sa.
-// Ak nie, použije sa predvolený obrázok 'obrazokobchodu.webp'.
-const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).href;
-// --- KONIEC NOVEJ ČASTI ---
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const imageURL = new URL(image, Astro.site).href;
+
+// Štruktúrované údaje pre Google (miestna firma). Adresa a hodiny sa berú
+// z src/data/site.ts, takže sú vždy rovnaké ako to, čo vidí návštevník.
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const florist = {
+	'@context': 'https://schema.org',
+	'@type': 'Florist',
+	'@id': `${SITE.url}/#kvetinarstvo`,
+	name: SITE.name,
+	url: `${SITE.url}/`,
+	image: [new URL('/og-image.jpg', SITE.url).href, new URL('/img/obchodtit.webp', SITE.url).href],
+	logo: new URL('/img/LOGO_KRUH-pinkwhite.png', SITE.url).href,
+	telephone: CONTACT.phone,
+	email: CONTACT.email,
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: CONTACT.street,
+		addressLocality: CONTACT.locality,
+		postalCode: CONTACT.postalCode,
+		addressCountry: 'SK',
+	},
+	geo: { '@type': 'GeoCoordinates', ...CONTACT.geo },
+	hasMap: CONTACT.maps,
+	openingHoursSpecification: HOURS.filter((h) => h.open && h.close).map((h) => ({
+		'@type': 'OpeningHoursSpecification',
+		dayOfWeek: h.days.map((d) => DAY_NAMES[d]),
+		opens: h.open,
+		closes: h.close,
+	})),
+	sameAs: [CONTACT.facebook],
+};
+const website = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	'@id': `${SITE.url}/#web`,
+	name: SITE.name,
+	url: `${SITE.url}/`,
+	inLanguage: 'sk-SK',
+	publisher: { '@id': florist['@id'] },
+};
 ---
 <!DOCTYPE html>
 <html lang="sk">
@@ -25,91 +69,77 @@ const finalImageURL = new URL(image || '/img/obrazokobchodu.webp', Astro.site).h
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <ClientRouter />
-    
+
     <title>{title}</title>
     <meta name="description" content={description}>
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}>
+    <link rel="canonical" href={canonicalURL}>
 
-    <meta name="keywords" content="kvetinárstvo Trenčianska Teplá, kvety Trenčianska Teplá, donáška kvetov Trenčianska Teplá, svadobné kytice Trenčianska Teplá, pohrebné vence Trenčianska Teplá, rezané kvety, kytice na mieru, kvetinárstvo v okolí, online kvetinárstvo, Kytica od srdca">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href}>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://kytica.b-cdn.net">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Hanken+Grotesk:wght@300..600&display=swap" rel="stylesheet">
+
+    <!-- Úvodná animácia: obsah hera sa skryje hneď (bez bliknutia) a animácia sa spustí,
+         keď je načítané písmo nadpisu, najneskôr však po 1 s. Bez JS je všetko viditeľné. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('intro');
+        // Animácie pri skrolovaní: prvky sa skryjú hneď, aby neblikli. Ak by sa hlavný
+        // skript nenačítal, po 4 s sa poistka postará, aby bol obsah aj tak viditeľný.
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('reveal-ready');
+          setTimeout(function () { if (!window.__revealInit) root.classList.remove('reveal-ready'); }, 4000);
+        }
+        var played = false;
+        var play = function () {
+          if (played) return;
+          played = true;
+          requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('intro-play'); }); });
+        };
+        setTimeout(play, 1000);
+        if (document.fonts && document.fonts.load) {
+          document.fonts.load('500 1em "Newsreader"').then(play, play);
+        } else {
+          play();
+        }
+      })();
+    </script>
+
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
-   
+    <meta name="theme-color" content="#FBF7F6">
 
+    <!-- Zdieľanie na sociálnych sieťach -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content={SITE.name}>
+    <meta property="og:locale" content="sk_SK">
+    <meta property="og:url" content={canonicalURL}>
     <meta property="og:title" content={title}>
     <meta property="og:description" content={description}>
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Kytica od srdca">
-    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href}>
-    
-    {/* ZMENA: Použili sme novú premennú 'finalImageURL' */}
-    <meta property="og:image" content={finalImageURL}>
-    
+    <meta property="og:image" content={imageURL}>
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:locale" content="sk_SK">
+    <meta property="og:image:alt" content={imageAlt}>
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content={title}>
     <meta name="twitter:description" content={description}>
-    
-    {/* ZMENA: Použili sme novú premennú 'finalImageURL' */}
-    <meta name="twitter:image" content={finalImageURL}>
+    <meta name="twitter:image" content={imageURL}>
+    <meta name="twitter:image:alt" content={imageAlt}>
 
-    {/* Slot pre ďalšie SEO tagy z podstránok */}
     <slot name="head" />
 
-    <script type="application/ld+json" is:inline>
-{
-  "@context": "https://schema.org",
-  "@type": "Florist",
-  "@id": "https://kyticaodsrdca.sk/#kvetinarstvo",
-  "name": "Kytica od srdca",
-  "url": "https://kyticaodsrdca.sk",
-  "image": "https://kyticaodsrdca.sk/img/obrazokobchodu.webp",
-  "logo": "https://kyticaodsrdca.sk/img/LOGO_KRUH-pinkwhite.png",
-  "telephone": "+421940181839",
-  "email": "kyticaodsrdca@gmail.com",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Milana Rastislava Štefánika 360",
-    "addressLocality": "Trenčianska Teplá",
-    "postalCode": "914 01",
-    "addressCountry": "SK"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 48.9341249,
-    "longitude": 18.1153304
-  },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:30",
-      "closes": "15:00"
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": "Saturday",
-      "opens": "09:00",
-      "closes": "11:30"
-    }
-  ],
-  "sameAs": ["https://www.facebook.com/kyticaodsrdca/?locale=sk_SK"]
-}
-</script>
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(florist)} />}
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(website)} />}
 </head>
-<body data-page={pageType}>
-    <div id="custom-cursor"></div>
+<body>
+    <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
     <slot />
     <script src="../scripts/script.js"></script>
 </body>

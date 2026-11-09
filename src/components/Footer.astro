@@ -1,19 +1,19 @@
 ---
 // Súbor: src/components/Footer.astro
+import { CONTACT } from '../data/site';
+const year = new Date().getFullYear();
 ---
-<footer class="footer-premium" id="footer">
-  <div class="footer-top fade-in-element">
-    <div class="footer-links">
-      <a href="https://online.kyticaodsrdca.sk" target="_blank" rel="noopener noreferrer" class="footer-link">Online ponuka</a>
-      <a href="https://www.facebook.com/kyticaodsrdca/?locale=sk_SK" target="_blank" rel="noopener noreferrer" class="footer-link">Facebook</a>
-    </div>
-  </div>
-  
-  <div class="footer-macro-container fade-in-element">
-    <h2 class="footer-macro-text" id="footer-macro">Kytica od srdca</h2>
-  </div>
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <p class="footer-wordmark" aria-hidden="true" data-reveal="mask"><span class="reveal-inner">Kytica od srdca</span></p>
 
-  <div class="footer-copyright fade-in-element">
-    <p>© 2026 Kytica od srdca, Florietta s. r. o. Všetky práva vyhradené.</p>
+    <div class="footer-bottom">
+      <nav class="footer-links" aria-label="Odkazy v pätičke">
+        <a href={CONTACT.online} target="_blank" rel="noopener noreferrer">Online ponuka</a>
+        <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href={`tel:${CONTACT.phone}`}>{CONTACT.phoneLabel}</a>
+      </nav>
+      <p class="footer-copy">© {year} Kytica od srdca, Florietta s. r. o.</p>
+    </div>
   </div>
 </footer>

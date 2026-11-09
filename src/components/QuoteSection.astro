@@ -1,0 +1,19 @@
+---
+// Súbor: src/components/QuoteSection.astro
+// Fotka ateliéru cez celú šírku s vetou z pôvodného textu „O nás“.
+// Počítač a mobil majú rôzne fotky, aby sa na mobile neopakovala fotka z úvodu.
+// Skrytá fotka sa vďaka loading="lazy" vôbec nesťahuje.
+// Na počítači sa fotka pri skrolovaní posúva pomalšie ako stránka (paralax).
+import { Image } from 'astro:assets';
+import imgShopWide from '../assets/img/obchodtit.webp';
+import imgShopTall from '../assets/img/obrazokobchodu.webp';
+import { nb } from '../data/site';
+---
+<section class="quote" aria-label="Náš ateliér" data-parallax="0.07">
+  <Image src={imgShopWide} alt="Interiér kvetinárstva s orchideami, izbovými rastlinami a darčekmi" class="quote-img quote-img--wide" widths={[800, 1280, 1920]} sizes="100vw" loading="lazy" />
+  <Image src={imgShopTall} alt="Interiér kvetinárstva s kvetmi, dekoráciami a darčekmi" class="quote-img quote-img--tall" widths={[643]} sizes="100vw" loading="lazy" />
+  <div class="quote-shade" aria-hidden="true"></div>
+  <blockquote class="quote-text" data-reveal="mask">
+    <p class="reveal-inner">{nb('Veríme, že kvety dokážu vyjadriť viac než tisíc slov.')}</p>
+  </blockquote>
+</section>

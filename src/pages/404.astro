@@ -1,0 +1,19 @@
+---
+// Súbor: src/pages/404.astro
+// Netlify túto stránku zobrazí pre každú neexistujúcu adresu. Google ju neindexuje.
+import Layout from '../layouts/Layout.astro';
+import { CONTACT } from '../data/site';
+---
+<Layout title="Stránka sa nenašla | Kytica od srdca" description="Táto stránka neexistuje. Pokračujte na hlavnú stránku kvetinárstva Kytica od srdca." noindex>
+  <main id="obsah" class="not-found">
+    <a href="/" class="not-found-logo" aria-label="Kytica od srdca, úvodná stránka">
+      <img src="/img/logo-darkpink.svg" alt="" width="96" height="96">
+    </a>
+    <h1 class="section-title">Táto stránka tu nie je</h1>
+    <p>Odkaz je pravdepodobne starý alebo v ňom chýba písmenko. Všetko podstatné nájdete na hlavnej stránke.</p>
+    <div class="not-found-actions">
+      <a href="/" class="btn btn-primary">Prejsť na hlavnú stránku</a>
+      <a href={`tel:${CONTACT.phone}`} class="btn btn-outline">Zavolať {CONTACT.phoneLabel}</a>
+    </div>
+  </main>
+</Layout>

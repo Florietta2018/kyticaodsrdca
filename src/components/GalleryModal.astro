@@ -1,9 +1,24 @@
 ---
 // Súbor: src/components/GalleryModal.astro
+// Lightbox: listovanie šípkami (tlačidlá aj klávesnica) alebo potiahnutím prstom,
+// zatvorenie krížikom, klávesom Esc alebo kliknutím mimo fotky.
+import Icon from './Icon.astro';
 ---
-<div class="modal" id="gallery-modal">
- <div class="modal-content">
-  <i class='bx bx-x' id="modal-close"></i>
-  <img src="" alt="Náhľad kytice" class="modal-img" id="modal-img">
- </div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Fotografia z galérie" hidden>
+  <figure class="lightbox-figure">
+    <img src="" alt="" class="lightbox-img" id="lightbox-img">
+    <figcaption class="lightbox-caption">
+      <span id="lightbox-caption"></span>
+      <span class="lightbox-count" id="lightbox-count"></span>
+    </figcaption>
+  </figure>
+  <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Predchádzajúca fotka">
+    <Icon name="arrow-left" size={22} />
+  </button>
+  <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Ďalšia fotka">
+    <Icon name="arrow-right" size={22} />
+  </button>
+  <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Zavrieť">
+    <Icon name="close" size={22} />
+  </button>
 </div>

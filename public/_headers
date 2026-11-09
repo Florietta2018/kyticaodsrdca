@@ -1,0 +1,4 @@
+# Súbory v /_astro/ majú v názve hash (pri každej zmene nový názov),
+# preto ich prehliadač môže mať v cache natrvalo. Zrýchľuje to opakované návštevy.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
