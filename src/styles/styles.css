@@ -1849,6 +1849,55 @@ body.menu-open .menu-toggle-lines span:last-child {
     will-change: transform;
 }
 
+/* Paralax na dotykových zariadeniach (mobil, tablet).
+   Na počítači paralax riadi skript spolu s Lenis; tu ho riadi priamo prehliadač
+   cez scroll-driven animácie, takže je plynulý aj pri rýchlom švihnutí prstom.
+   Staršie prehliadače bez podpory nechajú fotky jednoducho bez pohybu.
+   Pohyb je zámerne jemnejší než na počítači. */
+@keyframes parallaxInnerSoft {
+    from { transform: translateY(-4%) scale(1.08); }
+    to { transform: translateY(4%) scale(1.08); }
+}
+
+@keyframes parallaxInner {
+    from { transform: translateY(-5%) scale(1.1); }
+    to { transform: translateY(5%) scale(1.1); }
+}
+
+@keyframes parallaxLayer {
+    from { transform: translateY(1.8rem); }
+    to { transform: translateY(-1.8rem); }
+}
+
+@supports (animation-timeline: view()) {
+    @media not all and (hover: hover) and (pointer: fine) {
+        @media (prefers-reduced-motion: no-preference) {
+            /* Rám alebo sekcia určuje, kde na obrazovke sa fotka nachádza */
+            .atelier-frame { view-timeline-name: --atelier-photo; }
+            .quote { view-timeline-name: --quote-photo; }
+            .online-photos { view-timeline-name: --online-photos; }
+
+            /* Fotka v oblúku pod úvodom: posúva sa vnútri rámu, rám stojí */
+            .atelier-frame img {
+                animation: parallaxInnerSoft linear both;
+                animation-timeline: --atelier-photo;
+            }
+
+            /* Fotka v citáte: posúva sa pomalšie ako stránka */
+            .quote-img {
+                animation: parallaxInner linear both;
+                animation-timeline: --quote-photo;
+            }
+
+            /* Menšia fotka pri online ponuke ide o kúsok rýchlejšie, vzniká hĺbka */
+            .online-photo-second {
+                animation: parallaxLayer linear both;
+                animation-timeline: --online-photos;
+            }
+        }
+    }
+}
+
 /* -------------------------------------------
    15. OBMEDZENÝ POHYB
 ------------------------------------------- */
