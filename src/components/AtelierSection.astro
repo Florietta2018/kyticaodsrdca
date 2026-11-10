@@ -14,11 +14,14 @@ const services = [
 <section class="atelier" id="atelier">
   <div class="atelier-inner">
     <figure class="atelier-photo">
-      <!-- Oblúkový rám: fotka sa odhalí zdola a pri skrolovaní sa v ráme jemne posúva -->
-      <span class="atelier-frame" data-reveal="image" data-parallax="0.08">
-        <Image src={imgSpolocna} alt="Majiteľky kvetinárstva Kytica od srdca v ateliéri s pudlíkom" widths={[400, 600]} sizes="(max-width: 900px) 80vw, 420px" loading="lazy" />
-      </span>
-      <span class="atelier-outline" data-reveal="fade" data-reveal-delay="600" aria-hidden="true"></span>
+      <div class="atelier-media">
+        <!-- Oblúkový rám: fotka sa odhalí zdola a pri skrolovaní sa v ráme jemne posúva -->
+        <span class="atelier-frame" data-reveal="image" data-parallax="0.08">
+          <Image src={imgSpolocna} alt="Beatrica a Silvia, majiteľky kvetinárstva Kytica od srdca, s pudlíkom Starkom v ateliéri" widths={[400, 600]} sizes="(max-width: 900px) 80vw, 420px" loading="lazy" />
+        </span>
+        <span class="atelier-outline" data-reveal="fade" data-reveal-delay="600" aria-hidden="true"></span>
+      </div>
+      <figcaption class="atelier-caption" data-reveal="fade" data-reveal-delay="400">{nb('Beatrica a Silvia, majiteľky ateliéru, a pudlík Stark')}</figcaption>
     </figure>
 
     <div class="atelier-text">

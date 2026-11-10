@@ -884,9 +884,31 @@ body.menu-open .menu-toggle-lines span:last-child {
 
 /* Oblúkový rám odkazuje na okrúhly ornamentálny rám loga */
 .atelier-photo {
+    max-width: 46rem;
+}
+
+/* Fotka s oblúkovým obrysom; obrys sa meria k tomuto obalu, nie k popisku */
+.atelier-media {
     position: relative;
     isolation: isolate;
-    max-width: 46rem;
+}
+
+/* Popisok pod fotkou v rovnakom štýle ako popisky v galérii */
+.atelier-caption {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-style: italic;
+    line-height: 1.35;
+    color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+    /* obrys je tu posunutý doprava dole, popisok potrebuje viac miesta */
+    .atelier-caption {
+        margin-top: 2.8rem;
+        font-size: 1.6rem;
+    }
 }
 
 /* Rám s oblúkom oreže fotku; fotka sa v ňom môže posúvať (paralax) */
@@ -1064,10 +1086,16 @@ body.menu-open .menu-toggle-lines span:last-child {
     position: relative;
     display: block;
     width: 100%;
+    text-align: left;
+    cursor: zoom-in;
+}
+
+/* Rám fotky oreže priblíženie pri hoveri; popisok je pod ním */
+.gallery-photo {
+    display: block;
     overflow: hidden;
     border-radius: var(--radius-img);
     background: var(--petal);
-    cursor: zoom-in;
 }
 
 .gallery-item img {
@@ -1077,9 +1105,31 @@ body.menu-open .menu-toggle-lines span:last-child {
     transition: transform 0.9s var(--ease-out);
 }
 
+.gallery-caption {
+    display: block;
+    margin-top: 1.2rem;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--ink-soft);
+    transition: color 0.25s ease;
+}
+
 @media (hover: hover) {
     .gallery-item:hover img {
         transform: scale(1.035);
+    }
+
+    .gallery-item:hover .gallery-caption {
+        color: var(--rose-deep);
+    }
+}
+
+@media (max-width: 767px) {
+    .gallery-caption {
+        font-size: 1.6rem;
+        margin-top: 1rem;
     }
 }
 
@@ -1235,10 +1285,78 @@ body.menu-open .menu-toggle-lines span:last-child {
     margin-bottom: 2.8rem;
 }
 
-.online-text p {
+.online-text > p {
     max-width: 48ch;
     color: var(--ink-soft);
+    margin-bottom: 3.2rem;
+}
+
+/* Postup objednávky v troch krokoch */
+.steps {
+    list-style: none;
+    max-width: 52rem;
     margin-bottom: 4rem;
+    border-top: 1px solid var(--line);
+}
+
+.step {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 1.6rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.step-num {
+    font-family: var(--font-display);
+    font-size: 3.2rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--rose-deep);
+}
+
+.step h3 {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+}
+
+.step p {
+    font-size: 1.6rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+}
+
+.online-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+}
+
+@media (max-width: 520px) {
+    .step {
+        grid-template-columns: 3.2rem minmax(0, 1fr);
+        gap: 1.2rem;
+        padding: 1.6rem 0;
+    }
+
+    .step-num {
+        font-size: 2.6rem;
+    }
+
+    .step h3 {
+        font-size: 1.9rem;
+    }
+
+    .step p {
+        font-size: 1.5rem;
+    }
+
+    .online-actions .btn {
+        width: 100%;
+    }
 }
 
 @media (max-width: 900px) {
@@ -1299,6 +1417,10 @@ body.menu-open .menu-toggle-lines span:last-child {
     right: 0;
     bottom: 0;
     background: radial-gradient(ellipse at center, rgba(30, 22, 25, 0.62) 0%, rgba(30, 22, 25, 0.38) 70%, rgba(30, 22, 25, 0.5) 100%);
+}
+
+.quote-line {
+    display: block;
 }
 
 .quote-text {
@@ -1438,17 +1560,28 @@ body.menu-open .menu-toggle-lines span:last-child {
     color: var(--sage);
 }
 
+/* Mapa vyplní výšku stĺpca, tlačidlá Navigovať / Zavolať sú pod ňou */
 .visit-map {
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
     min-height: 44rem;
 }
 
 .visit-map iframe {
+    flex: 1 1 auto;
     width: 100%;
-    height: 100%;
-    min-height: 44rem;
+    height: auto;
+    min-height: 36rem;
     border-radius: var(--radius-img);
     filter: grayscale(0.85) contrast(1.05);
+}
+
+.visit-map-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
 }
 
 @media (max-width: 960px) {

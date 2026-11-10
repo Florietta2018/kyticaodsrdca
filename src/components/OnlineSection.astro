@@ -4,6 +4,13 @@ import { Image } from 'astro:assets';
 import imgMain from '../assets/img/n14.jpeg';
 import imgSecond from '../assets/img/n13.jpeg';
 import { CONTACT, nb } from '../data/site';
+
+// Postup objednávky: skutočná postupnosť krokov, preto číslovaný zoznam.
+const steps = [
+  { title: 'Vyberte si online alebo zavolajte', text: `Pozrite si online ponuku, alebo nám zavolajte na ${CONTACT.phoneLabel} a povedzte, čo si predstavujete.` },
+  { title: 'Kyticu uviažeme', text: 'Pripravíme ju ručne z čerstvých sezónnych kvetov podľa vášho výberu.' },
+  { title: 'Vyzdvihnete si ju bez čakania', text: 'Hotová vás čaká u nás v obchode na Štefánikovej ulici v Trenčianskej Teplej.' },
+];
 ---
 <section class="online" id="online">
   <div class="online-inner">
@@ -14,9 +21,23 @@ import { CONTACT, nb } from '../data/site';
     </div>
     <div class="online-text">
       <h2 class="section-title" data-reveal="mask"><span class="reveal-inner">Kytica pripravená, kým prídete</span></h2>
-      <p data-reveal="up" data-reveal-delay="150">{nb('V online ponuke si vyberiete kyticu alebo darček z pohodlia domova. My ju uviažeme a vy si ju vyzdvihnete u nás v obchode bez čakania.')}</p>
-      <div data-reveal="up" data-reveal-delay="250">
+      <p data-reveal="up" data-reveal-delay="150">{nb('Kyticu alebo darček si vyberiete z pohodlia domova a u nás si ich už len vyzdvihnete.')}</p>
+
+      <ol class="steps" data-reveal="up" data-reveal-delay="250">
+        {steps.map((s, i) => (
+          <li class="step">
+            <span class="step-num" aria-hidden="true">{i + 1}</span>
+            <div>
+              <h3>{nb(s.title)}</h3>
+              <p>{nb(s.text)}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="online-actions" data-reveal="up" data-reveal-delay="350">
         <a href={CONTACT.online} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Prejsť do online ponuky</a>
+        <a href={`tel:${CONTACT.phone}`} class="btn btn-outline">Zavolať {CONTACT.phoneLabel}</a>
       </div>
     </div>
   </div>

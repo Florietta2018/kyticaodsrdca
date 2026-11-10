@@ -14,6 +14,10 @@ import { nb } from '../data/site';
   <Image src={imgShopTall} alt="Interiér kvetinárstva s kvetmi, dekoráciami a darčekmi" class="quote-img quote-img--tall" widths={[643]} sizes="100vw" loading="lazy" />
   <div class="quote-shade" aria-hidden="true"></div>
   <blockquote class="quote-text" data-reveal="mask">
-    <p class="reveal-inner">{nb('Veríme, že kvety dokážu vyjadriť viac než tisíc slov.')}</p>
+    <!-- každá veta na vlastnom riadku, aby sa citát nezalomil uprostred myšlienky -->
+    <p class="reveal-inner">
+      <span class="quote-line">{nb('„Nie je to len krása.')}</span>
+      <span class="quote-line">Je to cit.“</span>
+    </p>
   </blockquote>
 </section>

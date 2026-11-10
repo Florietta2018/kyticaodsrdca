@@ -25,17 +25,17 @@ import n12 from '../assets/img/n12.jpeg';
 
 // batch 0 je viditeľný hneď, ďalšie sa na počítači odkrývajú tlačidlom.
 const items = [
-  { src: k1, caption: 'Náš ateliér', batch: 0 },
+  { src: k1, caption: 'Biela kytica s eukalyptom', batch: 0 },
   { src: k2, caption: 'Kvetinový box', batch: 0 },
-  { src: k3, caption: 'Svadobný sen', batch: 0 },
+  { src: k3, caption: 'Aranžmán v kvetináči', batch: 0 },
   { src: k8, caption: 'Čistá elegancia', batch: 0 },
   { src: k5, caption: 'Prírodná krása', batch: 0 },
   { src: k6, caption: 'Kvetinová radosť', batch: 0 },
   { src: k7, caption: 'Farebná harmónia', batch: 0 },
   { src: k9, caption: 'Voňavý pozdrav', batch: 0 },
   { src: n1, caption: 'Kytica na mieru', batch: 1 },
-  { src: n2, caption: 'Svadobná výzdoba', batch: 1 },
-  { src: n3, caption: 'Jarné prebudenie', batch: 1 },
+  { src: n2, caption: 'Pastelový kvetinový box', batch: 1 },
+  { src: n3, caption: 'Svadobná kytica', batch: 1 },
   { src: n4, caption: 'Milé potešenie', batch: 1 },
   { src: n5, caption: 'Pestré farby', batch: 2 },
   { src: n6, caption: 'Nežný dotyk', batch: 2 },
@@ -44,7 +44,7 @@ const items = [
   { src: n9, caption: 'Sezónny výber', batch: 3 },
   { src: n10, caption: 'Lokálne kvety', batch: 3 },
   { src: n11, caption: 'Moderný aranžmán', batch: 3 },
-  { src: n12, caption: 'Veľkolepá krása', batch: 3 },
+  { src: n12, caption: 'Kvety vo vedierku', batch: 3 },
 ];
 
 // Väčšia verzia každej fotky pre lightbox.
@@ -75,7 +75,10 @@ const maxBatch = Math.max(...items.map((i) => i.batch));
         data-reveal-delay={item.batch === 0 ? String((i % 4) * 70) : undefined}
         aria-label={`Zväčšiť fotografiu: ${item.caption}`}
       >
-        <Image src={item.src} alt={item.caption} widths={[360, 560, 800]} sizes="(max-width: 767px) 78vw, (max-width: 1200px) 33vw, 25vw" loading="lazy" />
+        <span class="gallery-photo">
+          <Image src={item.src} alt={item.caption} widths={[360, 560, 800]} sizes="(max-width: 767px) 78vw, (max-width: 1200px) 33vw, 25vw" loading="lazy" />
+        </span>
+        <span class="gallery-caption" aria-hidden="true">{item.caption}</span>
       </button>
     ))}
   </div>
