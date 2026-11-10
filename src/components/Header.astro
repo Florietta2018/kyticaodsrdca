@@ -27,7 +27,7 @@ import { CONTACT, HOURS } from '../data/site';
         <p class="nav-status open-status" data-open-status data-hours={JSON.stringify(HOURS)} hidden></p>
         <ul class="nav-contacts">
           <li><a href={`tel:${CONTACT.phone}`}><Icon name="phone" size={18} />{CONTACT.phoneLabel}</a></li>
-          <li><a href={CONTACT.maps} target="_blank" rel="noopener noreferrer"><Icon name="pin" size={18} />M. R. Štefánika 360, Trenčianska Teplá</a></li>
+          <li><a href={CONTACT.maps} target="_blank" rel="noopener noreferrer"><Icon name="pin" size={18} />{CONTACT.streetShort}, {CONTACT.locality}</a></li>
           <li><a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer"><Icon name="facebook" size={18} />Facebook</a></li>
         </ul>
       </div>

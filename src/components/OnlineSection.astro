@@ -15,15 +15,15 @@ const steps = [
 <section class="online" id="online">
   <div class="online-inner">
     <div class="online-photos">
-      <Image src={imgMain} alt="Ružová kytica s eukalyptom zabalená v ružovom papieri" class="online-photo-main" widths={[400, 700]} sizes="(max-width: 900px) 75vw, 34vw" loading="lazy" data-reveal="image" />
+      <Image src={imgMain} alt="Ružová kytica s eukalyptom zabalená v ružovom papieri" class="online-photo-main" widths={[400, 700]} sizes="(max-width: 900px) 75vw, 34vw" loading="lazy" />
       <!-- Menšia fotka sa pri skrolovaní posúva rýchlejšie, kompozícia tak dostane hĺbku -->
-      <Image src={imgSecond} alt="Pestrá lúčna kytica v pastelovom papieri" class="online-photo-second" widths={[300, 500]} sizes="(max-width: 900px) 42vw, 19vw" loading="lazy" data-reveal="image" data-reveal-delay="250" data-parallax="-0.09" data-parallax-layer />
+      <Image src={imgSecond} alt="Pestrá lúčna kytica v pastelovom papieri" class="online-photo-second" widths={[300, 500]} sizes="(max-width: 900px) 42vw, 19vw" loading="lazy" data-parallax="-0.09" data-parallax-layer />
     </div>
     <div class="online-text">
-      <h2 class="section-title" data-reveal="mask"><span class="reveal-inner">Kytica pripravená, kým prídete</span></h2>
-      <p data-reveal="up" data-reveal-delay="150">{nb('Kyticu alebo darček si vyberiete z pohodlia domova a u nás si ich už len vyzdvihnete.')}</p>
+      <h2 class="section-title"><span class="reveal-inner">Kytica pripravená, kým prídete</span></h2>
+      <p>{nb('Kyticu alebo darček si vyberiete z pohodlia domova a u nás si ich už len vyzdvihnete.')}</p>
 
-      <ol class="steps" data-reveal="up" data-reveal-delay="250">
+      <ol class="steps">
         {steps.map((s, i) => (
           <li class="step">
             <span class="step-num" aria-hidden="true">{i + 1}</span>
@@ -35,7 +35,7 @@ const steps = [
         ))}
       </ol>
 
-      <div class="online-actions" data-reveal="up" data-reveal-delay="350">
+      <div class="online-actions">
         <a href={CONTACT.online} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Prejsť do online ponuky</a>
         <a href={`tel:${CONTACT.phone}`} class="btn btn-outline">Zavolať {CONTACT.phoneLabel}</a>
       </div>

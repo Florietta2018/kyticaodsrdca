@@ -15,21 +15,21 @@ const services = [
   <div class="atelier-inner">
     <figure class="atelier-photo">
       <div class="atelier-media">
-        <!-- Oblúkový rám: fotka sa odhalí zdola a pri skrolovaní sa v ráme jemne posúva -->
-        <span class="atelier-frame" data-reveal="image" data-parallax="0.08">
+        <!-- Oblúkový rám: fotka sa pri skrolovaní v ráme jemne posúva (paralax) -->
+        <span class="atelier-frame" data-parallax="0.08">
           <Image src={imgSpolocna} alt="Beatrica a Silvia, majiteľky kvetinárstva Kytica od srdca, s pudlíkom Starkom v ateliéri" widths={[400, 600]} sizes="(max-width: 900px) 80vw, 420px" loading="lazy" />
         </span>
-        <span class="atelier-outline" data-reveal="fade" data-reveal-delay="600" aria-hidden="true"></span>
+        <span class="atelier-outline" aria-hidden="true"></span>
       </div>
-      <figcaption class="atelier-caption" data-reveal="fade" data-reveal-delay="400">{nb('Beatrica a Silvia, majiteľky ateliéru, a pudlík Stark')}</figcaption>
+      <figcaption class="atelier-caption">{nb('Beatrica a Silvia, majiteľky ateliéru, a pudlík Stark')}</figcaption>
     </figure>
 
     <div class="atelier-text">
-      <h2 class="section-title" data-reveal="mask"><span class="reveal-inner">{nb('Viazané s láskou a dušou')}</span></h2>
-      <p class="lead" data-reveal="up" data-reveal-delay="150">{nb('Každá kytica, ktorú vytvoríme, nesie viac než kvety: pozornosť, čas a rešpekt k prírode.')}</p>
-      <p data-reveal="up" data-reveal-delay="250">{nb('V našom ateliéri v Trenčianskej Teplej nájdete čerstvé sezónne a lokálne kvety z overených zdrojov, ručne vyrábanú keramiku a štýlové dekorácie. Radi poradíme s výberom alebo uviažeme kyticu presne podľa vašich predstáv.')}</p>
+      <h2 class="section-title"><span class="reveal-inner">{nb('Viazané s láskou a dušou')}</span></h2>
+      <p class="lead">{nb('Každá kytica, ktorú vytvoríme, nesie viac než kvety: pozornosť, čas a rešpekt k prírode.')}</p>
+      <p>{nb('V našom ateliéri v Trenčianskej Teplej nájdete čerstvé sezónne a lokálne kvety z overených zdrojov, ručne vyrábanú keramiku a štýlové dekorácie. Radi poradíme s výberom alebo uviažeme kyticu presne podľa vašich predstáv.')}</p>
 
-      <dl class="services" data-reveal="up" data-reveal-delay="300">
+      <dl class="services">
         {services.map((s) => (
           <div class="service">
             <dt>{nb(s.title)}</dt>

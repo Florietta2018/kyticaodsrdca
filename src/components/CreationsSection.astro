@@ -58,8 +58,8 @@ const maxBatch = Math.max(...items.map((i) => i.batch));
 ---
 <section class="creations" id="creations">
   <div class="creations-head">
-    <h2 class="section-title" data-reveal="mask"><span class="reveal-inner">Z našej dielne</span></h2>
-    <p data-reveal="up" data-reveal-delay="150">{nb('Kytice a aranžmány, ktoré u nás vznikli. Žiadna sa neopakuje, každú viažeme pre konkrétneho človeka a chvíľu.')}</p>
+    <h2 class="section-title"><span class="reveal-inner">Z našej dielne</span></h2>
+    <p>{nb('Kytice a aranžmány, ktoré u nás vznikli. Žiadna sa neopakuje, každú viažeme pre konkrétneho človeka a chvíľu.')}</p>
   </div>
 
   <div class="gallery" id="gallery" data-max-batch={maxBatch}>
@@ -71,8 +71,6 @@ const maxBatch = Math.max(...items.map((i) => i.batch));
         data-full={item.full}
         data-caption={item.caption}
         data-index={i}
-        data-reveal={item.batch === 0 ? 'image' : undefined}
-        data-reveal-delay={item.batch === 0 ? String((i % 4) * 70) : undefined}
         aria-label={`Zväčšiť fotografiu: ${item.caption}`}
       >
         <span class="gallery-photo">
