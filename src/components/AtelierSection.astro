@@ -22,14 +22,15 @@ const rituals: Array<{ icon: 'leaf' | 'ribbon' | 'note'; label: string; desc: st
   <div class="atelier-inner">
     <figure class="atelier-photo">
       <div class="atelier-media">
-        <!-- Oblúkový portrét s jemným paralaxom a teplou spodnou vinetou -->
-        <span class="atelier-frame" data-reveal="image" data-parallax="0.07">
+        <!-- Oblúkový portrét načítaný vopred bez opony (plynulý nábeh bez poskakovania na mobile) -->
+        <span class="atelier-frame" data-parallax="0.07">
           <Image
             src={imgSpolocna}
             alt="Beatrica a Silvia, majiteľky kvetinárstva Kytica od srdca, s pudlíkom Starkom v ateliéri"
             widths={[400, 600]}
             sizes="(max-width: 900px) 80vw, 440px"
-            loading="lazy"
+            loading="eager"
+            decoding="async"
           />
         </span>
         <span class="atelier-outline" aria-hidden="true"></span>
@@ -41,7 +42,7 @@ const rituals: Array<{ icon: 'leaf' | 'ribbon' | 'note'; label: string; desc: st
       <p class="section-kicker">Náš ateliér</p>
       <h2 class="section-title">{nb('Viazané s láskou')} <em>{nb('a dušou')}</em></h2>
       <p class="lead">{nb('Každá kytica, ktorá opustí náš stôl, nesie viac než kvety — pozornosť, pokojný čas a rešpekt k prírode.')}</p>
-      <p>{nb('V našom ateliéri v Trenčianskej Teplej spájame čerstvé sezónne kvety, prirodzené textúry eukalyptu a jemnú farebnú harmóniu. Či hľadáte drobnú radosť do vázy alebo veľkolepý dar, radi vám poradíme a uviažeme kompozíciu presne na mieru chvíle.')}</p>
+      <p class="atelier-body">{nb('V našom ateliéri v Trenčianskej Teplej spájame čerstvé sezónne kvety, prirodzené textúry eukalyptu a jemnú farebnú harmóniu. Či hľadáte drobnú radosť do vázy alebo veľkolepý dar, radi vám poradíme a uviažeme kompozíciu presne na mieru chvíle.')}</p>
 
       <dl class="services">
         {services.map((s) => (

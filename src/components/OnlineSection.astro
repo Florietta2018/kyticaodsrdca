@@ -34,16 +34,15 @@ const steps = [
           loading="lazy"
         />
       </div>
-      <Image
-        src={imgSecond}
-        alt="Pestrá lúčna kytica v pastelovom papieri"
-        class="online-photo-second"
-        widths={[300, 500]}
-        sizes="(max-width: 900px) 42vw, 19vw"
-        loading="lazy"
-        data-parallax="-0.08"
-        data-parallax-layer
-      />
+      <div class="online-photo-second" data-parallax="-0.08" data-parallax-layer>
+        <Image
+          src={imgSecond}
+          alt="Pestrá lúčna kytica v pastelovom papieri"
+          widths={[300, 500]}
+          sizes="(max-width: 900px) 42vw, 19vw"
+          loading="lazy"
+        />
+      </div>
     </div>
 
     <div class="online-text">
