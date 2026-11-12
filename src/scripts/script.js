@@ -179,6 +179,7 @@ function initMenu() {
         document.body.classList.toggle('menu-open', open);
         lockScroll(open);
         toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Zavrieť menu' : 'Otvoriť menu');
         toggle.querySelector('.menu-toggle-label').textContent = open ? 'Zavrieť' : 'Menu';
     };
 
