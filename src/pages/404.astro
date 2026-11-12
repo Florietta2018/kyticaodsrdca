@@ -1,19 +1,24 @@
 ---
 // Súbor: src/pages/404.astro
-// Netlify túto stránku zobrazí pre každú neexistujúcu adresu. Google ju neindexuje.
 import Layout from '../layouts/Layout.astro';
-import { CONTACT } from '../data/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { CONTACT, nb } from '../data/site';
 ---
-<Layout title="Stránka sa nenašla | Kytica od srdca" description="Táto stránka neexistuje. Pokračujte na hlavnú stránku kvetinárstva Kytica od srdca." noindex>
+<Layout
+  title="Stránka sa nenašla | Kytica od srdca"
+  description="Táto stránka už neexistuje. Pokračujte na hlavnú stránku kvetinového ateliéru Kytica od srdca."
+  noindex
+>
+  <Header solid />
   <main id="obsah" class="not-found">
-    <a href="/" class="not-found-logo" aria-label="Kytica od srdca, úvodná stránka">
-      <img src="/img/logo-darkpink.svg" alt="" width="96" height="96">
-    </a>
-    <h1 class="section-title">Táto stránka tu nie je</h1>
-    <p>Odkaz je pravdepodobne starý alebo v ňom chýba písmenko. Všetko podstatné nájdete na hlavnej stránke.</p>
+    <p class="section-kicker"><span>404</span> Stránka sa nenašla</p>
+    <h1 class="section-title">Tento kvietok <em>{nb('tu už nekvitne')}</em></h1>
+    <p>{nb('Odkaz je pravdepodobne starší alebo v adrese chýba písmenko. Našu aktuálnu tvorbu, svadobnú floristiku aj kontakty nájdete na úvodnej stránke.')}</p>
     <div class="not-found-actions">
-      <a href="/" class="btn btn-primary">Prejsť na hlavnú stránku</a>
+      <a href="/" class="btn btn-primary">Vrátiť sa do ateliéru</a>
       <a href={`tel:${CONTACT.phone}`} class="btn btn-outline">Zavolať {CONTACT.phoneLabel}</a>
     </div>
   </main>
+  <Footer />
 </Layout>

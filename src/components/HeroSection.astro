@@ -1,34 +1,57 @@
 ---
 // Súbor: src/components/HeroSection.astro
-// Záložné fotky pod videom: zobrazia sa, kým sa video z Bunny CDN nenačíta alebo ak sa
-// nenačíta vôbec (CDN ho púšťa len na doméne kyticaodsrdca.sk, lokálne vždy uvidíte fotku).
+// Jediný <video> element s atribútom media na <source>, aby mobil nesťahoval desktopové MP4 a naopak.
+// Záložná lokálna fotka zabezpečí okamžité zobrazenie aj pri obmedzení CDN mimo produkčnej domény.
 import heroPosterDesktop from '../assets/img/obchodtit.webp';
-import heroPosterMobile from '../assets/img/obchodtit.webp';
-import { CONTACT, HOURS } from '../data/site';
+import heroPosterMobile from '../assets/img/obchod-orchidey.webp';
+import Icon from './Icon.astro';
+import { CONTACT, HOURS, nb } from '../data/site';
 ---
-<section class="hero" id="home">
-    <div class="hero-media" aria-hidden="true">
-        <video class="hero-video hero-desktop" autoplay loop muted playsinline disablePictureInPicture poster="https://kytica.b-cdn.net/Kyticadesktop.webp" style={`background-image: url('${heroPosterDesktop.src}');`}>
-            <source src="https://kytica.b-cdn.net/Kyticadesktop.mp4" type="video/mp4" />
-        </video>
-        <video class="hero-video hero-mobile" autoplay loop muted playsinline disablePictureInPicture poster="https://kytica.b-cdn.net/Kyticamob.webp" style={`background-image: url('${heroPosterMobile.src}');`}>
-            <source src="https://kytica.b-cdn.net/Kyticamob.mp4" type="video/mp4" />
-        </video>
-    </div>
-    <div class="hero-shade" aria-hidden="true"></div>
+<section
+  class="hero"
+  id="home"
+  style={`--hero-fallback-desktop: url('${heroPosterDesktop.src}'); --hero-fallback-mobile: url('${heroPosterMobile.src}');`}
+>
+  <div class="hero-media" aria-hidden="true">
+    <video
+      class="hero-video"
+      id="hero-video"
+      autoplay
+      loop
+      muted
+      playsinline
+      disablePictureInPicture
+      poster="https://kytica.b-cdn.net/Kyticadesktop.webp"
+      data-poster-mobile="https://kytica.b-cdn.net/Kyticamob.webp"
+    >
+      <source src="https://kytica.b-cdn.net/Kyticamob.mp4" type="video/mp4" media="(max-width: 768px)" />
+      <source src="https://kytica.b-cdn.net/Kyticadesktop.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
 
-    <div class="hero-inner">
-        <p class="hero-place">Kvetinárstvo v Trenčianskej Teplej</p>
-        <h1 class="hero-title">
-            <span class="hero-line"><span class="hero-line-inner">Prekvapte krásou,</span></span>
-            <span class="hero-line"><span class="hero-line-inner">dotknite sa srdca</span></span>
-        </h1>
-        <p class="hero-sub">Čerstvé, sezónne kvety viazané ručne v&nbsp;našom ateliéri.</p>
-        <div class="hero-actions">
-            <a href={CONTACT.online} target="_blank" rel="noopener noreferrer" class="btn btn-on-dark" id="fcHeroBtn">Pozrieť online ponuku</a>
-            <a href={`tel:${CONTACT.phone}`} class="btn btn-ghost-on-dark">Zavolať {CONTACT.phoneLabel}</a>
-        </div>
+  <div class="hero-inner">
+    <p class="hero-place">
+      <span class="hero-place-rule" aria-hidden="true"></span>
+      <span>Kvetinový ateliér · Trenčianska Teplá</span>
+    </p>
+    <h1 class="hero-title">
+      <span class="hero-line"><span class="hero-line-inner">Prekvapte krásou,</span></span>
+      <span class="hero-line"><span class="hero-line-inner hero-title-italic">dotknite sa srdca</span></span>
+    </h1>
+    <p class="hero-sub">{nb('Čerstvé sezónne kvety, autorské boxy a svadobná floristika viazané ručne s citom pre každý detail.')}</p>
+    <div class="hero-actions">
+      <a href={`tel:${CONTACT.phone}`} class="btn btn-on-dark">
+        <Icon name="phone" size={16} />
+        <span>Zavolať · {CONTACT.phoneLabel}</span>
+      </a>
+      <a href="/#contact" class="btn btn-ghost-on-dark">Navštíviť ateliér</a>
     </div>
+  </div>
 
-    <p class="hero-status open-status" data-open-status data-hours={JSON.stringify(HOURS)} hidden></p>
+  <p class="hero-status open-status" data-open-status data-hours={JSON.stringify(HOURS)} hidden></p>
+
+  <a href="/#atelier" class="hero-scroll" aria-label="Posunúť nižšie do sekcie Ateliér">
+    <span class="hero-scroll-line" aria-hidden="true"></span>
+  </a>
 </section>

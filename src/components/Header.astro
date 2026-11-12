@@ -1,28 +1,61 @@
 ---
 // Súbor: src/components/Header.astro
+import { Image } from 'astro:assets';
+import logoLight from '../assets/img/LOGO_KRUH-pinkwhite.png';
+import logoDark from '../assets/img/Logo darkping.png';
 import Icon from './Icon.astro';
 import { CONTACT, HOURS } from '../data/site';
+
+interface Props {
+  solid?: boolean;
+}
+const { solid = false } = Astro.props;
 ---
-<header class="header" id="site-header">
+<header class={`header${solid ? ' is-scrolled is-static-solid' : ''}`} id="site-header">
   <div class="header-inner">
     <a href="/" class="brand" aria-label="Kytica od srdca, úvodná stránka">
-      <span class="brand-mark">
-        <img class="brand-logo brand-logo--light" src="/img/LOGO_KRUH-pinkwhite.svg" alt="" width="48" height="48">
-        <img class="brand-logo brand-logo--dark" src="/img/logo-darkpink.svg" alt="" width="48" height="48">
+      <span class="brand-mark" aria-hidden="true">
+        <Image
+          class="brand-logo brand-logo--light"
+          src={logoLight}
+          alt=""
+          widths={[108, 216]}
+          sizes="54px"
+          quality={92}
+          loading="eager"
+          decoding="async"
+        />
+        <Image
+          class="brand-logo brand-logo--dark"
+          src={logoDark}
+          alt=""
+          widths={[108, 216]}
+          sizes="54px"
+          quality={92}
+          loading="eager"
+          decoding="async"
+        />
       </span>
-      <span class="brand-name">Kytica od srdca</span>
+      <span class="brand-wordmark">
+        <span class="brand-name">Kytica <em>od</em> srdca</span>
+        <span class="brand-sub">Kvetinový ateliér</span>
+      </span>
     </a>
 
     <nav class="nav" id="site-nav" aria-label="Hlavná navigácia">
-      <a href="/#creations" class="nav-link">Naša tvorba</a>
       <a href="/#atelier" class="nav-link">Ateliér</a>
+      <a href="/#creations" class="nav-link">Naša tvorba</a>
+      <a href="/#weddings" class="nav-link">Svadby</a>
       <a href="/#contact" class="nav-link">Kontakt</a>
-      <a href={CONTACT.online} target="_blank" rel="noopener noreferrer" class="nav-cta">Objednať kyticu</a>
+      <a href={`tel:${CONTACT.phone}`} class="nav-cta">
+        <Icon name="phone" size={15} />
+        <span>Objednať · {CONTACT.phoneLabel}</span>
+      </a>
       <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer" class="nav-social" aria-label="Facebook">
-        <Icon name="facebook" size={18} />
+        <Icon name="facebook" size={17} />
       </a>
 
-      <!-- Spodok mobilného menu: rýchly kontakt (na počítači skrytý) -->
+      <!-- Spodok mobilného menu: živý stav prevádzky a rýchly kontakt -->
       <div class="nav-panel">
         <p class="nav-status open-status" data-open-status data-hours={JSON.stringify(HOURS)} hidden></p>
         <ul class="nav-contacts">

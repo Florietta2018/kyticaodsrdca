@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
 import AtelierSection from '../components/AtelierSection.astro';
 import CreationsSection from '../components/CreationsSection.astro';
+import WeddingsSection from '../components/WeddingsSection.astro';
 import QuoteSection from '../components/QuoteSection.astro';
 import OnlineSection from '../components/OnlineSection.astro';
 import ContactSection from '../components/ContactSection.astro';
@@ -12,9 +13,8 @@ import Footer from '../components/Footer.astro';
 import ScrollTopBtn from '../components/ScrollTopBtn.astro';
 import GalleryModal from '../components/GalleryModal.astro';
 
-// Titulok do ~60 znakov a popis do ~155 znakov, aby ich Google nezrezal.
-const pageTitle = "Kytica od srdca | Kvetinárstvo v Trenčianskej Teplej";
-const pageDescription = "Kvetinárstvo v Trenčianskej Teplej: kytice a boxy na mieru, svadobná floristika, smútočné vence, izbové rastliny a darčeky. Vyberte si aj v online ponuke.";
+const pageTitle = "Kytica od srdca | Kvetinový ateliér v Trenčianskej Teplej";
+const pageDescription = "Kvetinový ateliér v Trenčianskej Teplej: autorské kytice a boxy na mieru, svadobná floristika, smútočné vence, orchidey a darčeky. Objednávky telefonicky alebo osobne v ateliéri.";
 ---
 <Layout title={pageTitle} description={pageDescription}>
     <Header />
@@ -23,6 +23,7 @@ const pageDescription = "Kvetinárstvo v Trenčianskej Teplej: kytice a boxy na 
         <HeroSection />
         <AtelierSection />
         <CreationsSection />
+        <WeddingsSection />
         <QuoteSection />
         <OnlineSection />
         <ContactSection />

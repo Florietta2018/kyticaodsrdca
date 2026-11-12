@@ -1,30 +1,27 @@
 ---
 // Súbor: src/layouts/Layout.astro
-import { ClientRouter } from 'astro:transitions';
 import '../styles/styles.css';
 import { SITE, CONTACT, HOURS } from '../data/site';
 
 interface Props {
 	title: string;
 	description: string;
-	image?: string;      // obrázok pre zdieľanie, ideálne 1200 × 630 px
+	image?: string;
 	imageAlt?: string;
-	noindex?: boolean;   // napr. stránka 404
+	noindex?: boolean;
 }
 
 const {
 	title,
 	description,
 	image = '/og-image.jpg',
-	imageAlt = 'Interiér kvetinárstva Kytica od srdca s orchideami, rastlinami a darčekmi',
+	imageAlt = 'Kytica od srdca — kvetinový ateliér v Trenčianskej Teplej',
 	noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 const imageURL = new URL(image, Astro.site).href;
 
-// Štruktúrované údaje pre Google (miestna firma). Adresa a hodiny sa berú
-// z src/data/site.ts, takže sú vždy rovnaké ako to, čo vidí návštevník.
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const florist = {
 	'@context': 'https://schema.org',
@@ -32,6 +29,7 @@ const florist = {
 	'@id': `${SITE.url}/#kvetinarstvo`,
 	name: SITE.name,
 	url: `${SITE.url}/`,
+	priceRange: '€€',
 	image: [new URL('/og-image.jpg', SITE.url).href, new URL('/img/obchodtit.webp', SITE.url).href],
 	logo: new URL('/img/LOGO_KRUH-pinkwhite.png', SITE.url).href,
 	telephone: CONTACT.phone,
@@ -68,7 +66,6 @@ const website = {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <ClientRouter />
 
     <title>{title}</title>
     <meta name="description" content={description}>
@@ -78,29 +75,30 @@ const website = {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://kytica.b-cdn.net">
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Hanken+Grotesk:wght@300..600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Hanken+Grotesk:wght@300..600&display=swap" rel="stylesheet">
 
-    <!-- Úvodná animácia: obsah hera sa skryje hneď (bez bliknutia) a animácia sa spustí,
-         keď je načítané písmo nadpisu, najneskôr však po 1 s. Bez JS je všetko viditeľné. -->
+    <!-- Úvodná choreografia a jemné odhaľovanie fotografií (bez bliknutia a s poistkou bez JS) -->
     <script is:inline>
       (function () {
         var root = document.documentElement;
-        root.classList.add('intro');
-        // Animácie pri skrolovaní: prvky sa skryjú hneď, aby neblikli. Ak by sa hlavný
-        // skript nenačítal, po 4 s sa poistka postará, aby bol obsah aj tak viditeľný.
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          root.classList.add('reveal-ready');
-          setTimeout(function () { if (!window.__revealInit) root.classList.remove('reveal-ready'); }, 4000);
-        }
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        root.classList.add('intro', 'reveal-ready');
+        setTimeout(function () {
+          if (!window.__revealInit) root.classList.remove('reveal-ready');
+        }, 3500);
         var played = false;
         var play = function () {
           if (played) return;
           played = true;
-          requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('intro-play'); }); });
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              root.classList.add('intro-play');
+            });
+          });
         };
-        setTimeout(play, 1000);
+        setTimeout(play, 900);
         if (document.fonts && document.fonts.load) {
-          document.fonts.load('500 1em "Newsreader"').then(play, play);
+          document.fonts.load('400 1em "Newsreader"').then(play, play);
         } else {
           play();
         }
@@ -140,6 +138,7 @@ const website = {
 </head>
 <body>
     <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
+    <div class="paper-grain" aria-hidden="true"></div>
     <slot />
     <script src="../scripts/script.js"></script>
 </body>

@@ -5,15 +5,20 @@ const year = new Date().getFullYear();
 ---
 <footer class="footer" id="footer">
   <div class="footer-inner">
-    <p class="footer-wordmark" aria-hidden="true"><span class="reveal-inner">Kytica od srdca</span></p>
+    <p class="footer-eyebrow" aria-hidden="true">Kvetinový ateliér · Trenčianska Teplá</p>
+    <p class="footer-wordmark" aria-hidden="true">Kytica <span>od</span> srdca</p>
 
     <div class="footer-bottom">
       <nav class="footer-links" aria-label="Odkazy v pätičke">
-        <a href={CONTACT.online} target="_blank" rel="noopener noreferrer">Online ponuka</a>
-        <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href="/#atelier">Ateliér</a>
+        <a href="/#creations">Naša tvorba</a>
+        <a href="/#weddings">Svadby</a>
+        <a href="/#contact">Kontakt</a>
         <a href={`tel:${CONTACT.phone}`}>{CONTACT.phoneLabel}</a>
+        <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href={CONTACT.online} target="_blank" rel="noopener noreferrer">Pick &amp; Go</a>
       </nav>
-      <p class="footer-copy">© {year} Kytica od srdca, Florietta s. r. o.</p>
+      <p class="footer-copy">© {year} Kytica od srdca · Florietta s. r. o.</p>
     </div>
   </div>
 </footer>

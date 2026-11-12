@@ -2,32 +2,46 @@
 // Súbor: src/components/AtelierSection.astro
 import { Image } from 'astro:assets';
 import imgSpolocna from '../assets/img/spolocna.webp';
+import Icon from './Icon.astro';
 import { nb } from '../data/site';
 
 const services = [
-  { title: 'Kytice a boxy', text: 'Na narodeniny, výročie aj len tak, viazané na mieru.' },
-  { title: 'Svadby', text: 'Kytica pre nevestu aj výzdoba obradu a hostiny.' },
-  { title: 'Smútočná väzba', text: 'Vence a smútočné kytice s citom a úctou.' },
-  { title: 'Rastliny a darčeky', text: 'Orchidey, zeleň, keramika a drobnosti pre radosť.' },
+  { title: 'Podpisové kytice a boxy', text: 'Autorské väzby k narodeninám, výročiu aj z čistej pozornosti.' },
+  { title: 'Svadobná floristika', text: 'Kytica pre nevestu, pierko pre ženícha aj celková výzdoba sály.' },
+  { title: 'Smútočná väzba', text: 'Dôstojné vence a spomienkové aranžmány viazané s úctou a citom.' },
+  { title: 'Rastliny a keramika', text: 'Ušľachtilé orchidey, izbová zeleň a ručne glazované doplnky.' },
+];
+
+const rituals: Array<{ icon: 'leaf' | 'ribbon' | 'note'; label: string; desc: string }> = [
+  { icon: 'leaf', label: 'Ranná čerstvosť', desc: 'Starostlivo vyberané sezónne a lokálne kvety z overených pestovateľských zdrojov.' },
+  { icon: 'ribbon', label: 'Umenie balenia', desc: 'Jemný tónovaný papier, saténová stuha a čistý rukopis bez rušivého celofánu.' },
+  { icon: 'note', label: 'Osobný odkaz', desc: 'Ku každej kytici radi priložíme vkusnú kartičku s vaším osobným venovaním.' },
 ];
 ---
 <section class="atelier" id="atelier">
   <div class="atelier-inner">
     <figure class="atelier-photo">
       <div class="atelier-media">
-        <!-- Oblúkový rám: fotka sa pri skrolovaní v ráme jemne posúva (paralax) -->
-        <span class="atelier-frame" data-parallax="0.08">
-          <Image src={imgSpolocna} alt="Beatrica a Silvia, majiteľky kvetinárstva Kytica od srdca, s pudlíkom Starkom v ateliéri" widths={[400, 600]} sizes="(max-width: 900px) 80vw, 420px" loading="lazy" />
+        <!-- Oblúkový portrét s jemným paralaxom a teplou spodnou vinetou -->
+        <span class="atelier-frame" data-reveal="image" data-parallax="0.07">
+          <Image
+            src={imgSpolocna}
+            alt="Beatrica a Silvia, majiteľky kvetinárstva Kytica od srdca, s pudlíkom Starkom v ateliéri"
+            widths={[400, 600]}
+            sizes="(max-width: 900px) 80vw, 440px"
+            loading="lazy"
+          />
         </span>
         <span class="atelier-outline" aria-hidden="true"></span>
       </div>
-      <figcaption class="atelier-caption">{nb('Beatrica a Silvia, majiteľky ateliéru, a pudlík Stark')}</figcaption>
+      <figcaption class="atelier-caption">{nb('Beatrica a Silvia, zakladateľky ateliéru, s pudlíkom Starkom')}</figcaption>
     </figure>
 
     <div class="atelier-text">
-      <h2 class="section-title"><span class="reveal-inner">{nb('Viazané s láskou a dušou')}</span></h2>
-      <p class="lead">{nb('Každá kytica, ktorú vytvoríme, nesie viac než kvety: pozornosť, čas a rešpekt k prírode.')}</p>
-      <p>{nb('V našom ateliéri v Trenčianskej Teplej nájdete čerstvé sezónne a lokálne kvety z overených zdrojov, ručne vyrábanú keramiku a štýlové dekorácie. Radi poradíme s výberom alebo uviažeme kyticu presne podľa vašich predstáv.')}</p>
+      <p class="section-kicker">Náš ateliér</p>
+      <h2 class="section-title">{nb('Viazané s láskou')} <em>{nb('a dušou')}</em></h2>
+      <p class="lead">{nb('Každá kytica, ktorá opustí náš stôl, nesie viac než kvety — pozornosť, pokojný čas a rešpekt k prírode.')}</p>
+      <p>{nb('V našom ateliéri v Trenčianskej Teplej spájame čerstvé sezónne kvety, prirodzené textúry eukalyptu a jemnú farebnú harmóniu. Či hľadáte drobnú radosť do vázy alebo veľkolepý dar, radi vám poradíme a uviažeme kompozíciu presne na mieru chvíle.')}</p>
 
       <dl class="services">
         {services.map((s) => (
@@ -38,5 +52,20 @@ const services = [
         ))}
       </dl>
     </div>
+  </div>
+
+  <!-- Darčekový štandard ateliéru -->
+  <div class="ritual-bar" aria-label="Štandard nášho ateliéru">
+    {rituals.map((r) => (
+      <div class="ritual-item">
+        <span class="ritual-icon" aria-hidden="true">
+          <Icon name={r.icon} size={21} />
+        </span>
+        <div>
+          <h3 class="ritual-title">{nb(r.label)}</h3>
+          <p class="ritual-desc">{nb(r.desc)}</p>
+        </div>
+      </div>
+    ))}
   </div>
 </section>

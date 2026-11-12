@@ -1,23 +1,37 @@
 ---
 // Súbor: src/components/QuoteSection.astro
-// Fotka ateliéru cez celú šírku s vetou z pôvodného textu „O nás“.
-// Počítač a mobil majú rôzne fotky, aby sa na mobile neopakovala fotka z úvodu.
-// Skrytá fotka sa vďaka loading="lazy" vôbec nesťahuje.
-// Na počítači sa fotka pri skrolovaní posúva pomalšie ako stránka (paralax).
+// Fotka ateliéru cez celú šírku: desktop aj mobil používajú celoročné zábery orchideí (bez vianočných dekorácií a dátumoviek).
 import { Image } from 'astro:assets';
 import imgShopWide from '../assets/img/obchodtit.webp';
-import imgShopTall from '../assets/img/obrazokobchodu.webp';
+import imgShopOrchids from '../assets/img/obchod-orchidey.webp';
 import { nb } from '../data/site';
 ---
-<section class="quote" aria-label="Náš ateliér" data-parallax="0.07">
-  <Image src={imgShopWide} alt="Interiér kvetinárstva s orchideami, izbovými rastlinami a darčekmi" class="quote-img quote-img--wide" widths={[800, 1280, 1920]} sizes="100vw" loading="lazy" />
-  <Image src={imgShopTall} alt="Interiér kvetinárstva s kvetmi, dekoráciami a darčekmi" class="quote-img quote-img--tall" widths={[643]} sizes="100vw" loading="lazy" />
+<section class="quote" aria-label="Filozofia ateliéru" data-parallax="0.06">
+  <Image
+    src={imgShopWide}
+    alt="Interiér kvetinárstva Kytica od srdca s orchideami, izbovými rastlinami a darčekmi"
+    class="quote-img quote-img--wide"
+    widths={[800, 1280, 1920]}
+    sizes="100vw"
+    loading="lazy"
+  />
+  <Image
+    src={imgShopOrchids}
+    alt="Rozkvitnuté ružové a biele orchidey v tehlovom interiéri nášho ateliéru"
+    class="quote-img quote-img--tall"
+    widths={[480, 785]}
+    sizes="100vw"
+    loading="lazy"
+  />
   <div class="quote-shade" aria-hidden="true"></div>
-  <blockquote class="quote-text">
-    <!-- každá veta na vlastnom riadku, aby sa citát nezalomil uprostred myšlienky -->
-    <p class="reveal-inner">
-      <span class="quote-line">{nb('„Nie je to len krása.')}</span>
-      <span class="quote-line">Je to cit.“</span>
-    </p>
-  </blockquote>
+  <figure class="quote-content">
+    <span class="quote-ornament" aria-hidden="true"></span>
+    <blockquote class="quote-text">
+      <p>
+        <span class="quote-line">{nb('„Nie je to len krása.')}</span>
+        <span class="quote-line">Je to cit.“</span>
+      </p>
+    </blockquote>
+    <figcaption class="quote-author">Ateliér Kytica od srdca</figcaption>
+  </figure>
 </section>

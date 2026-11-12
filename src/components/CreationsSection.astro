@@ -5,49 +5,48 @@ import { nb } from '../data/site';
 import k1 from '../assets/img/k1.jpg';
 import k2 from '../assets/img/k2.jpg';
 import k3 from '../assets/img/k3.jpg';
+import k4 from '../assets/img/k4.jpg';
 import k5 from '../assets/img/k5.jpg';
-import k6 from '../assets/img/k6.jpg';
 import k7 from '../assets/img/k7.jpg';
 import k8 from '../assets/img/k8.jpg';
 import k9 from '../assets/img/k9.jpg';
 import n1 from '../assets/img/n1.jpeg';
 import n2 from '../assets/img/n2.jpeg';
 import n3 from '../assets/img/n3.jpeg';
-import n4 from '../assets/img/n4.jpeg';
 import n5 from '../assets/img/n5.jpeg';
-import n6 from '../assets/img/n6.jpeg';
 import n7 from '../assets/img/n7.jpeg';
-import n8 from '../assets/img/n8.jpeg';
 import n9 from '../assets/img/n9.jpeg';
-import n10 from '../assets/img/n10.jpeg';
 import n11 from '../assets/img/n11.jpeg';
 import n12 from '../assets/img/n12.jpeg';
 
-// batch 0 je viditeľný hneď, ďalšie sa na počítači odkrývajú tlačidlom.
-const items = [
-  { src: k1, caption: 'Biela kytica s eukalyptom', batch: 0 },
-  { src: k2, caption: 'Kvetinový box', batch: 0 },
-  { src: k3, caption: 'Aranžmán v kvetináči', batch: 0 },
-  { src: k8, caption: 'Čistá elegancia', batch: 0 },
-  { src: k5, caption: 'Prírodná krása', batch: 0 },
-  { src: k6, caption: 'Kvetinová radosť', batch: 0 },
-  { src: k7, caption: 'Farebná harmónia', batch: 0 },
-  { src: k9, caption: 'Voňavý pozdrav', batch: 0 },
-  { src: n1, caption: 'Kytica na mieru', batch: 1 },
-  { src: n2, caption: 'Pastelový kvetinový box', batch: 1 },
-  { src: n3, caption: 'Svadobná kytica', batch: 1 },
-  { src: n4, caption: 'Milé potešenie', batch: 1 },
-  { src: n5, caption: 'Pestré farby', batch: 2 },
-  { src: n6, caption: 'Nežný dotyk', batch: 2 },
-  { src: n7, caption: 'Elegantná krása', batch: 2 },
-  { src: n8, caption: 'Jemná harmónia', batch: 2 },
-  { src: n9, caption: 'Sezónny výber', batch: 3 },
-  { src: n10, caption: 'Lokálne kvety', batch: 3 },
-  { src: n11, caption: 'Moderný aranžmán', batch: 3 },
-  { src: n12, caption: 'Kvety vo vedierku', batch: 3 },
+const categories = [
+  { id: 'all', label: 'Celý výber' },
+  { id: 'kytice', label: 'Kytice' },
+  { id: 'boxy', label: 'Kvetinové boxy' },
+  { id: 'svadby', label: 'Svadby' },
+  { id: 'dekoracie', label: 'Aranžmány a vence' },
 ];
 
-// Väčšia verzia každej fotky pre lightbox.
+// Kurátorský výber 16 unikátnych prác bez duplicít a s čistými orezmi.
+const items = [
+  { src: k1, caption: 'Biela eustoma s eukalyptom', category: 'svadby', tag: 'Svadobná väzba', batch: 0 },
+  { src: n9, caption: 'Ružová symfónia s eukalyptom', category: 'kytice', tag: 'Podpisová kytica', batch: 0 },
+  { src: n11, caption: 'Púdrové tóny v zamatovom boxe', category: 'boxy', tag: 'Kvetinový box', batch: 0 },
+  { src: k8, caption: 'Smaragd a pávie pierko', category: 'dekoracie', tag: 'Interiérový aranžmán', batch: 0 },
+  { src: n3, caption: 'Nevesta v čipke a zeleni', category: 'svadby', tag: 'Svadobná kytica', batch: 0 },
+  { src: k2, caption: 'Ranná rosa v akvarelovom boxe', category: 'boxy', tag: 'Kvetinový box', batch: 0 },
+  { src: k3, caption: 'Jesenná poézia v prútí', category: 'dekoracie', tag: 'Trvácny aranžmán', batch: 0 },
+  { src: n1, caption: 'Kytičky v prírodnom papieri', category: 'kytice', tag: 'Darčeková väzba', batch: 0 },
+  { src: k4, caption: 'Svadobná kytica s pierkom', category: 'svadby', tag: 'Svadobný set', batch: 1 },
+  { src: k5, caption: 'Obláčik z pastelovej gypsomilky', category: 'boxy', tag: 'Kvetinový box', batch: 1 },
+  { src: k7, caption: 'Čistota bielych ruží', category: 'dekoracie', tag: 'Aranžmán v nádobe', batch: 1 },
+  { src: n2, caption: 'Lúčna harmónia v ružovom', category: 'boxy', tag: 'Kvetinový box', batch: 1 },
+  { src: n7, caption: 'Romantická eustoma a zeleň', category: 'boxy', tag: 'Kvetinový box', batch: 2 },
+  { src: k9, caption: 'Ruže na kováčskej bráne', category: 'dekoracie', tag: 'Veniec na dvere', batch: 2 },
+  { src: n12, caption: 'Záhradný pozdrav s nevädzou', category: 'dekoracie', tag: 'Aranžmán vo vedierku', batch: 2 },
+  { src: n5, caption: 'Purpurové pohladenie', category: 'boxy', tag: 'Kvetinový box', batch: 2 },
+];
+
 const gallery = await Promise.all(
   items.map(async (item) => ({
     ...item,
@@ -58,8 +57,25 @@ const maxBatch = Math.max(...items.map((i) => i.batch));
 ---
 <section class="creations" id="creations">
   <div class="creations-head">
-    <h2 class="section-title"><span class="reveal-inner">Z našej dielne</span></h2>
-    <p>{nb('Kytice a aranžmány, ktoré u nás vznikli. Žiadna sa neopakuje, každú viažeme pre konkrétneho človeka a chvíľu.')}</p>
+    <div>
+      <p class="section-kicker">Z našej dielne</p>
+      <h2 class="section-title">Kurátorský výber <em>tvorby</em></h2>
+    </div>
+    <p class="creations-intro">{nb('Kytice, boxy a aranžmány, ktoré vznikli pod našimi rukami. Žiadna väzba sa neopakuje — každú tvoríme pre konkrétneho človeka a okamih.')}</p>
+  </div>
+
+  <div class="gallery-filters" role="tablist" aria-label="Filtrovať tvorbu podľa príležitosti">
+    {categories.map((cat, idx) => (
+      <button
+        type="button"
+        role="tab"
+        class={`filter-btn${idx === 0 ? ' is-active' : ''}`}
+        data-filter={cat.id}
+        aria-selected={idx === 0 ? 'true' : 'false'}
+      >
+        {cat.label}
+      </button>
+    ))}
   </div>
 
   <div class="gallery" id="gallery" data-max-batch={maxBatch}>
@@ -68,14 +84,25 @@ const maxBatch = Math.max(...items.map((i) => i.batch));
         type="button"
         class={`gallery-item${item.batch > 0 ? ' is-extra' : ''}`}
         data-batch={item.batch}
+        data-category={item.category}
         data-full={item.full}
         data-caption={item.caption}
+        data-tag={item.tag}
         data-index={i}
-        aria-label={`Zväčšiť fotografiu: ${item.caption}`}
+        data-reveal={item.batch === 0 ? 'image' : undefined}
+        aria-label={`Zväčšiť fotografiu: ${item.caption} (${item.tag})`}
       >
         <span class="gallery-photo">
-          <Image src={item.src} alt={item.caption} widths={[360, 560, 800]} sizes="(max-width: 767px) 78vw, (max-width: 1200px) 33vw, 25vw" loading="lazy" />
+          <Image
+            src={item.src}
+            alt={item.caption}
+            widths={[360, 560, 800]}
+            sizes="(max-width: 767px) 78vw, (max-width: 1023px) 46vw, 24vw"
+            loading="lazy"
+          />
+          <span class="gallery-zoom-pill" aria-hidden="true">Detail</span>
         </span>
+        <span class="gallery-meta" aria-hidden="true">{item.tag}</span>
         <span class="gallery-caption" aria-hidden="true">{item.caption}</span>
       </button>
     ))}
@@ -86,8 +113,8 @@ const maxBatch = Math.max(...items.map((i) => i.batch));
     <span class="gallery-progress-hint">Potiahnite pre ďalšie fotky</span>
   </div>
 
-  <div class="gallery-more">
-    <button type="button" class="btn btn-outline" id="gallery-more">Zobraziť ďalšie fotky</button>
+  <div class="gallery-more" id="gallery-more-wrap">
+    <button type="button" class="btn btn-outline" id="gallery-more">Zobraziť ďalšie práce</button>
     <button type="button" class="btn-text" id="gallery-less" hidden>Zobraziť menej</button>
   </div>
 </section>

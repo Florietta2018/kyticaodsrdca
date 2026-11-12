@@ -16,6 +16,7 @@ export const CONTACT = {
   postalCode: '914 01',
   locality: 'Trenčianska Teplá',
   city: '914 01 Trenčianska Teplá',
+  landmark: 'Pohodlné bezplatné parkovanie priamo pri prevádzke',
   geo: { latitude: 48.9341214, longitude: 18.1179053 },
   facebook: 'https://www.facebook.com/kyticaodsrdca/?locale=sk_SK',
   online: 'https://online.kyticaodsrdca.sk',
@@ -40,7 +41,7 @@ export const nb = (text: string) => {
   let prev;
   do {
     prev = out;
-    out = out.replace(/(^|[\s ])([vszkaoiuVSZKAOIU]) /g, '$1$2 ');
+    out = out.replace(/(^|[\s\u00A0])([vszkaoiuVSZKAOIU]) /g, '$1$2\u00A0');
   } while (out !== prev);
   return out;
 };

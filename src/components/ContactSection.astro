@@ -6,13 +6,15 @@ import { CONTACT, HOURS, formatTime, nb } from '../data/site';
 <section class="visit" id="contact">
   <div class="visit-inner">
     <div class="visit-text">
-      <h2 class="section-title"><span class="reveal-inner">Zastavte sa u nás</span></h2>
-      <p class="visit-intro">{nb('Radi vás privítame v ateliéri, poradíme s výberom alebo pripravíme kyticu presne podľa vašich predstáv.')}</p>
+      <p class="section-kicker section-kicker--light">Osobné stretnutie</p>
+      <h2 class="section-title">Zastavte sa <em>{nb('u nás')}</em></h2>
+      <p class="visit-intro">{nb('Radi vás privítame v ateliéri pri vôni čerstvých kvetov, poradíme s výberom alebo uviažeme kyticu presne podľa vašich predstáv.')}</p>
 
       <div class="visit-columns">
         <div class="visit-block">
-          <h3>Adresa</h3>
+          <h3>Adresa a parkovanie</h3>
           <address>{CONTACT.street}<br>{CONTACT.city}</address>
+          <p class="visit-landmark">{nb(CONTACT.landmark)}</p>
         </div>
 
         <div class="visit-block">
@@ -32,18 +34,34 @@ import { CONTACT, HOURS, formatTime, nb } from '../data/site';
       </div>
 
       <ul class="visit-contacts">
-        <li><a href={`tel:${CONTACT.phone}`}><Icon name="phone" />{CONTACT.phoneLabel}</a></li>
-        <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" />{CONTACT.email}</a></li>
-        <li><a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer"><Icon name="facebook" />Facebook</a></li>
+        <li><a href={`tel:${CONTACT.phone}`}><Icon name="phone" size={18} />{CONTACT.phoneLabel}</a></li>
+        <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={18} />{CONTACT.email}</a></li>
+        <li><a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer"><Icon name="facebook" size={18} />Facebook</a></li>
       </ul>
     </div>
 
     <div class="visit-map">
-      <iframe src={CONTACT.mapEmbed} title="Mapa: kvetinárstvo Kytica od srdca, M. R. Štefánika 360, Trenčianska Teplá" width="1200" height="380" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      <!-- Najčastejšie akcie pri mape: jedno ťuknutie otvorí navigáciu alebo hovor -->
+      <div class="visit-map-frame">
+        <iframe
+          src={CONTACT.mapEmbed}
+          title="Mapa: kvetinárstvo Kytica od srdca, M. R. Štefánika 360, Trenčianska Teplá"
+          width="1200"
+          height="380"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
       <div class="visit-map-actions">
-        <a href={CONTACT.maps} target="_blank" rel="noopener noreferrer" class="btn btn-on-dark"><Icon name="pin" size={18} />Navigovať</a>
-        <a href={`tel:${CONTACT.phone}`} class="btn btn-ghost-on-dark"><Icon name="phone" size={18} />Zavolať</a>
+        <a href={CONTACT.maps} target="_blank" rel="noopener noreferrer" class="btn btn-on-dark">
+          <Icon name="pin" size={17} />
+          <span>Navigovať k ateliéru</span>
+        </a>
+        <a href={`tel:${CONTACT.phone}`} class="btn btn-ghost-on-dark">
+          <Icon name="phone" size={17} />
+          <span>Zavolať</span>
+        </a>
       </div>
     </div>
   </div>

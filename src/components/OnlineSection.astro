@@ -3,30 +3,58 @@
 import { Image } from 'astro:assets';
 import imgMain from '../assets/img/n14.jpeg';
 import imgSecond from '../assets/img/n13.jpeg';
+import Icon from './Icon.astro';
 import { CONTACT, nb } from '../data/site';
 
-// Postup objednávky: skutočná postupnosť krokov, preto číslovaný zoznam.
 const steps = [
-  { title: 'Vyberte si online alebo zavolajte', text: `Pozrite si online ponuku, alebo nám zavolajte na ${CONTACT.phoneLabel} a povedzte, čo si predstavujete.` },
-  { title: 'Kyticu uviažeme', text: 'Pripravíme ju ručne z čerstvých sezónnych kvetov podľa vášho výberu.' },
-  { title: 'Vyzdvihnete si ju bez čakania', text: 'Hotová vás čaká u nás v obchode na Štefánikovej ulici v Trenčianskej Teplej.' },
+  {
+    title: 'Zavolajte nám alebo sa zastavte',
+    text: `Ozvite sa nám na ${CONTACT.phoneLabel} alebo príďte osobne do nášho ateliéru — radi vám poradíme s výberom kvetov aj farebným ladením.`,
+  },
+  {
+    title: 'Čerstvo ju uviažeme na mieru',
+    text: 'Kompozíciu ručne pripravíme tesne pred vyzdvihnutím zo sezónnych kvetov, zladíme tónovaný papier, stuhu aj kartičku s venovaním.',
+  },
+  {
+    title: 'Vyzdvihnete si ju bez čakania',
+    text: 'Hotová kytica vás počká vo vode presne v dohodnutý čas, s bezplatným parkovaním priamo pri prevádzke.',
+  },
 ];
 ---
 <section class="online" id="online">
   <div class="online-inner">
     <div class="online-photos">
-      <Image src={imgMain} alt="Ružová kytica s eukalyptom zabalená v ružovom papieri" class="online-photo-main" widths={[400, 700]} sizes="(max-width: 900px) 75vw, 34vw" loading="lazy" />
-      <!-- Menšia fotka sa pri skrolovaní posúva rýchlejšie, kompozícia tak dostane hĺbku -->
-      <Image src={imgSecond} alt="Pestrá lúčna kytica v pastelovom papieri" class="online-photo-second" widths={[300, 500]} sizes="(max-width: 900px) 42vw, 19vw" loading="lazy" data-parallax="-0.09" data-parallax-layer />
+      <div class="online-photo-main-wrap" data-reveal="image">
+        <Image
+          src={imgMain}
+          alt="Ružová kytica s eukalyptom zabalená v ružovom papieri"
+          class="online-photo-main"
+          widths={[400, 700]}
+          sizes="(max-width: 900px) 75vw, 34vw"
+          loading="lazy"
+        />
+      </div>
+      <Image
+        src={imgSecond}
+        alt="Pestrá lúčna kytica v pastelovom papieri"
+        class="online-photo-second"
+        widths={[300, 500]}
+        sizes="(max-width: 900px) 42vw, 19vw"
+        loading="lazy"
+        data-parallax="-0.08"
+        data-parallax-layer
+      />
     </div>
+
     <div class="online-text">
-      <h2 class="section-title"><span class="reveal-inner">Kytica pripravená, kým prídete</span></h2>
-      <p>{nb('Kyticu alebo darček si vyberiete z pohodlia domova a u nás si ich už len vyzdvihnete.')}</p>
+      <p class="section-kicker">Objednávka bez čakania</p>
+      <h2 class="section-title">{nb('Kytica na mieru,')} <em>{nb('pripravená na váš čas')}</em></h2>
+      <p>{nb('Najradšej tvoríme v priamom rozhovore s vami — stačí krátky telefonát alebo osobná návšteva ateliéru. Poviete nám príležitosť, obľúbené tóny či rozpočet a o všetko ostatné sa postaráme.')}</p>
 
       <ol class="steps">
         {steps.map((s, i) => (
           <li class="step">
-            <span class="step-num" aria-hidden="true">{i + 1}</span>
+            <span class="step-num" aria-hidden="true">0{i + 1}</span>
             <div>
               <h3>{nb(s.title)}</h3>
               <p>{nb(s.text)}</p>
@@ -36,9 +64,23 @@ const steps = [
       </ol>
 
       <div class="online-actions">
-        <a href={CONTACT.online} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Prejsť do online ponuky</a>
-        <a href={`tel:${CONTACT.phone}`} class="btn btn-outline">Zavolať {CONTACT.phoneLabel}</a>
+        <a href={`tel:${CONTACT.phone}`} class="btn btn-primary">
+          <Icon name="phone" size={16} />
+          <span>Zavolať · {CONTACT.phoneLabel}</span>
+        </a>
+        <a href="/#contact" class="btn btn-outline">
+          <Icon name="pin" size={16} />
+          <span>Osobne v ateliéri</span>
+        </a>
       </div>
+
+      <p class="online-pickngo">
+        {nb('Hľadáte už hotovú väzbu na rýchly odber? Pozrieť si môžete aj náš doplnkový')}{' '}
+        <a href={CONTACT.online} target="_blank" rel="noopener noreferrer">
+          <span>Pick &amp; Go výber</span>
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </p>
     </div>
   </div>
 </section>

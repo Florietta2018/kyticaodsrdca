@@ -1,0 +1,74 @@
+---
+// Súbor: src/components/WeddingsSection.astro
+// Prémiový editoriálový blok pre svadby, eventy a osobnú konzultáciu.
+import { Image } from 'astro:assets';
+import imgBride from '../assets/img/n3.jpeg';
+import imgSet from '../assets/img/k4.jpg';
+import Icon from './Icon.astro';
+import { CONTACT, nb } from '../data/site';
+---
+<section class="weddings" id="weddings">
+  <div class="weddings-inner">
+    <div class="weddings-copy">
+      <p class="section-kicker">Svadby a udalosti na mieru</p>
+      <h2 class="section-title">{nb('Kvety pre chvíle,')} <em>{nb('ktoré zostanú v pamäti')}</em></h2>
+      <p class="weddings-lead">{nb('Od nevestinej kytice a pierka pre ženícha až po výzdobu obradu, slávnostného stola a fotokútika — všetko zladené do jedného rukopisu.')}</p>
+
+      <ul class="weddings-pillars">
+        <li>
+          <strong>Osobná konzultácia v ateliéri</strong>
+          <span>{nb('V pokoji si prejdeme šaty, priestor, farebnú paletu aj sezónnu dostupnosť kvetov.')}</span>
+        </li>
+        <li>
+          <strong>Kompletný svadobný servis</strong>
+          <span>{nb('Kytica nevesty, kytičky pre družičky, pierka, výzdoba auta, kostola aj svadobnej sály.')}</span>
+        </li>
+        <li>
+          <strong>Dôstojné spomienkové väzby</strong>
+          <span>{nb('S rovnakou starostlivosťou a citom pripravujeme aj smútočné vence a kytice so stuhou.')}</span>
+        </li>
+      </ul>
+
+      <figure class="weddings-testimonial">
+        <blockquote>
+          {nb('„Nádherná práca, čerstvé kvety, ktoré vydržali neuveriteľne dlho, a nesmierne milý, ľudský prístup v každom detaile.“')}
+        </blockquote>
+        <figcaption>
+          <span class="stars" aria-label="Hodnotenie 5 z 5 hviezdičiek">★★★★★</span>
+          <span>Overené hodnotenia zákazníkov · Google Trenčianska Teplá</span>
+        </figcaption>
+      </figure>
+
+      <div class="weddings-actions">
+        <a href={`tel:${CONTACT.phone}`} class="btn btn-primary">
+          <Icon name="phone" size={16} />
+          <span>Dohodnúť konzultáciu · {CONTACT.phoneLabel}</span>
+        </a>
+        <a href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Dopyt – svadobná / kvetinová výzdoba')}`} class="btn btn-outline">
+          Napísať dopyt
+        </a>
+      </div>
+    </div>
+
+    <div class="weddings-visuals">
+      <div class="weddings-photo-main" data-reveal="image">
+        <Image
+          src={imgBride}
+          alt="Nevesta v čipkovaných šatách so svadobnou kyticou z bielych ruží a eukalyptu"
+          widths={[440, 760]}
+          sizes="(max-width: 900px) 82vw, 36vw"
+          loading="lazy"
+        />
+      </div>
+      <div class="weddings-photo-inset" data-parallax="-0.08" data-parallax-layer>
+        <Image
+          src={imgSet}
+          alt="Detail svadobnej kytice a pierka pre ženícha na drevenom podnose"
+          widths={[300, 480]}
+          sizes="(max-width: 900px) 44vw, 18vw"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>

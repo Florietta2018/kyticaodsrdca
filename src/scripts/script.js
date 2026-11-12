@@ -1,14 +1,11 @@
 // Súbor: src/scripts/script.js
-// Spúšťa sa pri každom načítaní stránky (aj po prechode cez Astro ClientRouter).
-// Všetky listenery na window/document sa pri odchode zo stránky zrušia cez AbortController.
+// Čistý klientsky skript bez zbytočného routera: plynulý posun (Lenis), zdržanlivé odhaľovanie
+// fotografií, kurátorské filtrovanie galérie, prístupný Lightbox aj mobilné menu a živé hodiny.
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 
-let pageController = null;
-
 /* ------------------------------------------------------------------
    Plynulé skrolovanie (Lenis) – len na počítači s myšou alebo touchpadom.
-   Na dotykových zariadeniach a pri „obmedziť pohyb“ ostáva natívne skrolovanie.
 ------------------------------------------------------------------ */
 let lenis = null;
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -18,14 +15,12 @@ function initSmoothScroll() {
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     if (!finePointer || prefersReducedMotion()) return;
     lenis = new Lenis({
-        lerp: 0.085,
+        lerp: 0.082,
         autoRaf: true,
-        // Vo vnútri lightboxu a otvoreného menu Lenis koliesko neobsluhuje.
         prevent: (node) => Boolean(node.closest && node.closest('#lightbox, #site-nav')),
     });
 }
 
-// Zamknutie stránky pri otvorenom menu alebo lightboxe.
 function lockScroll(locked) {
     document.body.classList.toggle('no-scroll', locked);
     if (lenis) {
@@ -34,12 +29,10 @@ function lockScroll(locked) {
     }
 }
 
-// Posun na prvok alebo na pozíciu. Odsadenie pod pevnú hlavičku zabezpečí
-// scroll-padding-top v CSS (rešpektuje ho Lenis aj natívny posun).
 function scrollToTarget(target) {
     const isNumber = typeof target === 'number';
     if (lenis) {
-        lenis.scrollTo(target, { duration: 1.4 });
+        lenis.scrollTo(target, { duration: 1.35 });
         return;
     }
     const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
@@ -47,8 +40,6 @@ function scrollToTarget(target) {
     else target.scrollIntoView({ behavior });
 }
 
-// Odkazy na sekcie (#creations, /#contact …) posúvame cez Lenis, aby boli rovnako plynulé.
-// Capture fáza a preventDefault zároveň zabránia, aby odkaz spracoval ClientRouter.
 document.addEventListener('click', (e) => {
     if (!lenis || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
     const link = e.target.closest && e.target.closest('a[href*="#"]');
@@ -58,90 +49,65 @@ document.addEventListener('click', (e) => {
     const section = document.getElementById(decodeURIComponent(url.hash.slice(1)));
     if (!section) return;
     e.preventDefault();
-    // Ak je otvorené menu, stránku najprv odomkneme, inak by Lenis posun ignoroval.
     if (document.body.classList.contains('no-scroll')) lockScroll(false);
     scrollToTarget(section);
     history.replaceState(history.state, '', url.hash);
-}, { capture: true });
-
-document.addEventListener('astro:before-swap', () => {
-    if (pageController) pageController.abort();
-    lockScroll(false);
-});
-
-document.addEventListener('astro:page-load', () => {
-    if (pageController) pageController.abort();
-    pageController = new AbortController();
-    const { signal } = pageController;
-
-    initSmoothScroll();
-    initReveal(signal);
-    initParallax(signal);
-    initHeader(signal);
-    initHeroVideo();
-    initMenu(signal);
-    initOpenStatus();
-    initGallery(signal);
-    initScrollTop(signal);
 });
 
 /* ------------------------------------------------------------------
-   Objavovanie prvkov pri skrolovaní (data-reveal = mask | up | image | fade)
-   Každý prvok sa animuje iba raz. Počiatočný skrytý stav nastavuje trieda
-   html.reveal-ready (pridá ju skript v <head>, pri „obmedziť pohyb“ nie).
+   Odhaľovanie fotografií pri vstupe do zorného poľa ([data-reveal="image"])
 ------------------------------------------------------------------ */
-function initReveal(signal) {
+function revealElement(el, delayMs = 0) {
+    if (delayMs > 0) el.style.setProperty('--reveal-delay', `${delayMs}ms`);
+    el.classList.add('is-revealed');
+    setTimeout(() => {
+        el.classList.add('reveal-done');
+        el.style.removeProperty('--reveal-delay');
+    }, delayMs + 1350);
+}
+
+function initReveal() {
     window.__revealInit = true;
     if (!document.documentElement.classList.contains('reveal-ready')) return;
 
-    // Pozíciu kontrolujeme cez getBoundingClientRect pri skrolovaní. IntersectionObserver
-    // tu nepoužívame: fotku úplne orezanú cez clip-path považuje za neviditeľnú a nikdy ju neoznámi.
     const pending = new Set(document.querySelectorAll('[data-reveal]:not(.is-revealed)'));
-    pending.forEach((el) => {
-        if (el.dataset.revealDelay) el.style.setProperty('--reveal-delay', `${el.dataset.revealDelay}ms`);
-    });
-
-    const reveal = (el) => {
-        el.classList.add('is-revealed');
-        pending.delete(el);
-        // Po dobehnutí animácie odstránime oneskorenie, aby neplatilo pre hover efekty.
-        const delay = Number(el.dataset.revealDelay) || 0;
-        setTimeout(() => {
-            el.classList.add('reveal-done');
-            el.style.removeProperty('--reveal-delay');
-        }, delay + 1600);
-    };
+    if (!pending.size) return;
 
     let ticking = false;
     const check = () => {
         ticking = false;
         const vh = window.innerHeight;
+        let visibleInFrame = 0;
         pending.forEach((el) => {
             const rect = el.getBoundingClientRect();
-            if (rect.width === 0 && rect.height === 0) return; // skrytý prvok
-            // Fotky sa začnú odhaľovať hneď pri vstupe na obrazovku (inak by pri rýchlom
-            // skrolovaní zostávali prázdne miesta), texty až keď sú kúsok vnútri.
-            const trigger = el.dataset.reveal === 'image' ? vh : vh * 0.9;
-            if (rect.top < trigger && rect.bottom > 0) reveal(el);
+            if (rect.width === 0 && rect.height === 0) return;
+            if (rect.top < vh * 0.96 && rect.bottom > 0) {
+                pending.delete(el);
+                const stagger = el.classList.contains('gallery-item') ? (visibleInFrame++ % 4) * 65 : 0;
+                revealElement(el, stagger);
+            }
         });
+        if (!pending.size) {
+            window.removeEventListener('scroll', schedule);
+            window.removeEventListener('resize', schedule);
+        }
     };
+
     const schedule = () => {
         if (ticking || !pending.size) return;
         ticking = true;
         requestAnimationFrame(check);
     };
 
-    window.addEventListener('scroll', schedule, { passive: true, signal });
-    window.addEventListener('resize', schedule, { signal });
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
     check();
 }
 
 /* ------------------------------------------------------------------
-   Paralax na fotkách (len keď beží Lenis, teda na počítači)
-   data-parallax="0.1"         fotka sa posúva vnútri svojho rámu (rám ostáva)
-   data-parallax + -layer      posúva sa celý prvok (vrstvy s rôznou rýchlosťou)
+   Paralax na fotografiách (počítač cez Lenis)
 ------------------------------------------------------------------ */
-function initParallax(signal) {
+function initParallax() {
     if (!lenis) return;
     const items = Array.from(document.querySelectorAll('[data-parallax]')).map((el) => {
         const layer = el.hasAttribute('data-parallax-layer');
@@ -149,9 +115,7 @@ function initParallax(signal) {
             el,
             layer,
             speed: Number(el.dataset.parallax) || 0,
-            // vrstva meria pozíciu podľa rodiča, aby ju vlastný posun neovplyvňoval
             anchor: layer ? el.parentElement : el,
-            // v ráme môže byť viac fotiek pre rôzne šírky obrazovky; posúvame tú viditeľnú
             imgs: layer || el.tagName === 'IMG' ? [el] : Array.from(el.querySelectorAll('img')),
         };
     }).filter((item) => item.imgs.length && item.speed);
@@ -164,7 +128,6 @@ function initParallax(signal) {
             if (!img) return;
             const rect = anchor.getBoundingClientRect();
             if (rect.bottom < -200 || rect.top > vh + 200) return;
-            // -1 = prvok práve vchádza zdola, 0 = je v strede obrazovky, 1 = odchádza hore
             const progress = (vh / 2 - (rect.top + rect.height / 2)) / (vh / 2 + rect.height / 2);
             const shift = progress * speed * rect.height;
             img.style.transform = layer
@@ -173,40 +136,41 @@ function initParallax(signal) {
         });
     };
 
-    const unsubscribe = lenis.on('scroll', update);
-    window.addEventListener('resize', update, { signal });
-    signal.addEventListener('abort', () => {
-        if (typeof unsubscribe === 'function') unsubscribe();
-    });
+    lenis.on('scroll', update);
+    window.addEventListener('resize', update);
     update();
 }
 
 /* ------------------------------------------------------------------
-   Hlavička: po odscrollovaní z hera dostane plné pozadie
+   Hlavička a úvodné video
 ------------------------------------------------------------------ */
-function initHeader(signal) {
+function initHeader() {
     const header = document.getElementById('site-header');
-    if (!header) return;
+    if (!header || header.classList.contains('is-static-solid')) return;
     const update = () => header.classList.toggle('is-scrolled', window.scrollY > 40);
-    window.addEventListener('scroll', update, { passive: true, signal });
+    window.addEventListener('scroll', update, { passive: true });
     update();
 }
 
-/* ------------------------------------------------------------------
-   Video v úvode: pri nastavení „obmedziť pohyb“ ho zastavíme na prvom zábere
------------------------------------------------------------------- */
 function initHeroVideo() {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    document.querySelectorAll('.hero-video').forEach((video) => {
+    const video = document.getElementById('hero-video');
+    if (!video) return;
+
+    // Na mobile nastavíme zodpovedajúci vertikálny poster bez sťahovania druhého videa
+    if (window.matchMedia('(max-width: 768px)').matches && video.dataset.posterMobile) {
+        video.poster = video.dataset.posterMobile;
+    }
+
+    if (prefersReducedMotion()) {
         video.removeAttribute('autoplay');
         video.pause();
-    });
+    }
 }
 
 /* ------------------------------------------------------------------
-   Mobilné menu
+   Mobilné menu s plným zachytením klávesového fokusu (Focus Trap)
 ------------------------------------------------------------------ */
-function initMenu(signal) {
+function initMenu() {
     const toggle = document.getElementById('menu-toggle');
     const nav = document.getElementById('site-nav');
     if (!toggle || !nav) return;
@@ -220,20 +184,38 @@ function initMenu(signal) {
 
     toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
     nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+        if (!document.body.classList.contains('menu-open')) return;
+        if (e.key === 'Escape') {
             setOpen(false);
             toggle.focus();
+            return;
         }
-    }, { signal });
-    // Pri zväčšení okna na desktop menu zavrieme, aby nezostal zamknutý scroll.
-    window.matchMedia('(min-width: 961px)').addEventListener('change', (e) => {
+        if (e.key === 'Tab') {
+            const focusables = [
+                toggle,
+                ...Array.from(nav.querySelectorAll('a[href]')).filter((el) => el.getClientRects().length > 0),
+            ];
+            if (!focusables.length) return;
+            const pos = focusables.indexOf(document.activeElement);
+            if (e.shiftKey && (pos <= 0)) {
+                e.preventDefault();
+                focusables[focusables.length - 1].focus();
+            } else if (!e.shiftKey && pos === focusables.length - 1) {
+                e.preventDefault();
+                focusables[0].focus();
+            }
+        }
+    });
+
+    window.matchMedia('(min-width: 1041px)').addEventListener('change', (e) => {
         if (e.matches) setOpen(false);
-    }, { signal });
+    });
 }
 
 /* ------------------------------------------------------------------
-   „Teraz otvorené / zatvorené“ podľa otváracích hodín (čas v Bratislave)
+   „Teraz otvorené / zatvorené“ podľa času v Bratislave a sviatkov SR
 ------------------------------------------------------------------ */
 const DAY_PHRASE = ['v nedeľu', 'v pondelok', 'v utorok', 'v stredu', 'vo štvrtok', 'v piatok', 'v sobotu'];
 
@@ -244,13 +226,11 @@ function bratislavaNow() {
         hour: 'numeric', minute: 'numeric', hourCycle: 'h23',
     }).formatToParts(new Date());
     const get = (type) => Number(parts.find((p) => p.type === type).value);
-    // Dátum zostavíme v UTC, aby sme s ním mohli bezpečne posúvať dni.
     const date = new Date(Date.UTC(get('year'), get('month') - 1, get('day')));
     return { date, minutes: get('hour') * 60 + get('minute') };
 }
 
 function easterSunday(year) {
-    // Anonymný gregoriánsky algoritmus
     const a = year % 19, b = Math.floor(year / 100), c = year % 100;
     const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
     const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
@@ -261,7 +241,6 @@ function easterSunday(year) {
     return Date.UTC(year, month - 1, day);
 }
 
-// Štátne sviatky SR. V tieto dni môže byť otvorené inak, preto stav radšej nezobrazujeme.
 function isHoliday(date) {
     const md = `${date.getUTCDate()}.${date.getUTCMonth() + 1}`;
     const fixed = ['1.1', '6.1', '1.5', '8.5', '5.7', '29.8', '1.9', '15.9', '1.11', '17.11', '24.12', '25.12', '26.12'];
@@ -289,7 +268,7 @@ function openStatusText(hours) {
     const today = hoursFor(hours, date.getUTCDay());
     if (today) {
         if (minutes >= toMinutes(today.open) && minutes < toMinutes(today.close)) {
-            return { open: true, text: `Teraz otvorené, dnes do ${prettyTime(today.close)}` };
+            return { open: true, text: `Teraz otvorené · dnes do ${prettyTime(today.close)}` };
         }
         if (minutes < toMinutes(today.open)) {
             return { open: false, text: `Dnes otvárame o ${prettyTime(today.open)}` };
@@ -302,7 +281,7 @@ function openStatusText(hours) {
         const row = hoursFor(hours, next.getUTCDay());
         if (row) {
             const when = offset === 1 ? 'zajtra' : DAY_PHRASE[next.getUTCDay()];
-            return { open: false, text: `Teraz zatvorené, otvárame ${when} o ${prettyTime(row.open)}` };
+            return { open: false, text: `Zatvorené · otvárame ${when} o ${prettyTime(row.open)}` };
         }
     }
     return null;
@@ -317,11 +296,10 @@ function initOpenStatus() {
             el.classList.toggle('is-open', status.open);
             el.hidden = false;
         } catch {
-            // Ak niečo zlyhá, stav jednoducho nezobrazíme. Hodiny sú stále v tabuľke.
+            // Hodiny zostávajú dostupné v tabuľke
         }
     });
 
-    // Zvýraznenie dnešného dňa v tabuľke hodín (cez sviatky nie, hodiny môžu byť iné)
     try {
         const { date } = bratislavaNow();
         if (isHoliday(date)) return;
@@ -335,78 +313,117 @@ function initOpenStatus() {
             row.querySelector('th')?.append(tag);
         });
     } catch {
-        // Bez zvýraznenia je tabuľka stále úplná.
+        // Tabuľka je platná aj bez štítku
     }
 }
 
 /* ------------------------------------------------------------------
-   Galéria: „Zobraziť ďalšie“, posuvník na mobile, lightbox
+   Galéria: Filtrovanie podľa príležitostí, dávky fotiek, posuvník, Lightbox
 ------------------------------------------------------------------ */
-function initGallery(signal) {
+function initGallery() {
     const gallery = document.getElementById('gallery');
     if (!gallery) return;
     const items = Array.from(gallery.querySelectorAll('.gallery-item'));
-
-    // Odkrývanie ďalších fotiek po dávkach (desktop)
+    const filterBtns = Array.from(document.querySelectorAll('.filter-btn'));
+    const moreWrap = document.getElementById('gallery-more-wrap');
     const moreBtn = document.getElementById('gallery-more');
     const lessBtn = document.getElementById('gallery-less');
     const maxBatch = Number(gallery.dataset.maxBatch || 0);
-    let shownBatch = 0;
 
-    const renderBatches = () => {
-        items.forEach((item) => item.classList.toggle('is-shown', Number(item.dataset.batch) <= shownBatch));
-        if (moreBtn) moreBtn.hidden = shownBatch >= maxBatch;
-        if (lessBtn) lessBtn.hidden = shownBatch === 0;
+    let shownBatch = 0;
+    let activeFilter = 'all';
+
+    gallery.classList.add('is-js-stagger');
+
+    const updateStagger = () => {
+        const visible = items.filter((el) => el.getClientRects().length > 0);
+        items.forEach((el) => el.classList.remove('is-stagger', 'is-stagger-2'));
+        visible.forEach((el, idx) => {
+            if (idx % 4 === 1 || idx % 4 === 3) el.classList.add('is-stagger');
+            if (idx % 2 === 1) el.classList.add('is-stagger-2');
+        });
     };
+
+    const updateThumb = () => {
+        const thumb = document.getElementById('gallery-thumb');
+        if (!thumb) return;
+        const max = gallery.scrollWidth - gallery.clientWidth;
+        const ratio = max > 0 ? Math.min(1, Math.max(0, gallery.scrollLeft / max)) : 0;
+        thumb.style.setProperty('--gallery-progress', ratio.toFixed(4));
+    };
+
+    const renderGallery = (animateFresh = []) => {
+        const isFiltered = activeFilter !== 'all';
+        gallery.classList.toggle('is-filtered', isFiltered);
+
+        items.forEach((item) => {
+            const matchCat = !isFiltered || item.dataset.category === activeFilter;
+            item.classList.toggle('is-filtered-out', !matchCat);
+            item.classList.toggle('is-shown', Number(item.dataset.batch) <= shownBatch);
+        });
+
+        if (moreWrap) moreWrap.hidden = isFiltered;
+        if (moreBtn) moreBtn.hidden = isFiltered || shownBatch >= maxBatch;
+        if (lessBtn) lessBtn.hidden = isFiltered || shownBatch === 0;
+
+        updateStagger();
+        updateThumb();
+
+        if (animateFresh.length && !prefersReducedMotion()) {
+            animateFresh.forEach((item) => {
+                item.dataset.reveal = 'image';
+                item.classList.remove('is-revealed', 'reveal-done');
+            });
+            void gallery.offsetHeight;
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                animateFresh.forEach((item, i) => revealElement(item, i * 65));
+            }));
+        }
+    };
+
+    filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const nextFilter = btn.dataset.filter || 'all';
+            if (nextFilter === activeFilter) return;
+            activeFilter = nextFilter;
+            filterBtns.forEach((b) => {
+                const active = b === btn;
+                b.classList.toggle('is-active', active);
+                b.setAttribute('aria-selected', String(active));
+            });
+            gallery.scrollLeft = 0;
+            const matching = items.filter((item) => activeFilter === 'all'
+                ? Number(item.dataset.batch) <= shownBatch
+                : item.dataset.category === activeFilter);
+            renderGallery(matching);
+        });
+    });
 
     moreBtn?.addEventListener('click', () => {
         shownBatch = Math.min(shownBatch + 1, maxBatch);
-        const fresh = Array.from(gallery.querySelectorAll(`.gallery-item[data-batch="${shownBatch}"]`));
-        // Nové fotky dostanú rovnakú „oponu“ ako fotky pri skrolovaní, jedna po druhej.
-        fresh.forEach((item, i) => {
-            item.dataset.reveal = 'image';
-            item.classList.remove('is-revealed', 'reveal-done');
-            item.style.setProperty('--reveal-delay', `${i * 70}ms`);
-        });
-        renderBatches();
-        void gallery.offsetHeight; // prehliadač si zapamätá skrytý počiatočný stav
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            fresh.forEach((item, i) => {
-                item.classList.add('is-revealed');
-                setTimeout(() => {
-                    item.classList.add('reveal-done');
-                    item.style.removeProperty('--reveal-delay');
-                }, i * 70 + 1200);
-            });
-        }));
-        // Posunieme fokus na prvú novú fotku, aby čítačky obrazovky vedeli, čo pribudlo.
-        gallery.querySelector(`.gallery-item[data-batch="${shownBatch}"]`)?.focus({ preventScroll: true });
+        const fresh = items.filter((item) => Number(item.dataset.batch) === shownBatch);
+        renderGallery(fresh);
+        fresh[0]?.focus({ preventScroll: true });
     });
+
     lessBtn?.addEventListener('click', () => {
         shownBatch = 0;
-        renderBatches();
+        renderGallery();
         const creations = document.getElementById('creations');
         if (creations) scrollToTarget(creations);
     });
-    renderBatches();
 
-    // Ukazovateľ posunu na mobile
-    const thumb = document.getElementById('gallery-thumb');
-    if (thumb) {
-        const updateThumb = () => {
-            const max = gallery.scrollWidth - gallery.clientWidth;
-            const ratio = max > 0 ? gallery.scrollLeft / max : 0;
-            thumb.style.transform = `translateX(${ratio * 233}%)`;
-        };
-        gallery.addEventListener('scroll', updateThumb, { passive: true });
-        window.addEventListener('resize', updateThumb, { signal });
+    gallery.addEventListener('scroll', updateThumb, { passive: true });
+    window.addEventListener('resize', () => {
+        updateStagger();
         updateThumb();
-    }
+    });
 
-    initLightbox(items, signal);
+    renderGallery();
+    initLightbox(items);
 }
 
-function initLightbox(items, signal) {
+function initLightbox(items) {
     const box = document.getElementById('lightbox');
     const img = document.getElementById('lightbox-img');
     const caption = document.getElementById('lightbox-caption');
@@ -420,16 +437,17 @@ function initLightbox(items, signal) {
     let list = [];
     let index = 0;
     let lastFocus = null;
-
     let swapTimer = null;
+
     const render = (item) => {
         img.src = item.dataset.full;
         img.alt = item.dataset.caption;
-        caption.textContent = item.dataset.caption;
+        caption.textContent = item.dataset.tag
+            ? `${item.dataset.caption} — ${item.dataset.tag}`
+            : item.dataset.caption;
         count.textContent = `${index + 1} / ${list.length}`;
     };
 
-    // fade = true: stará fotka sa stratí, nová sa po načítaní objaví (prelínanie pri listovaní)
     const show = (i, fade = false) => {
         index = (i + list.length) % list.length;
         const item = list[index];
@@ -450,14 +468,14 @@ function initLightbox(items, signal) {
             };
             if (preload.complete) reveal();
             else preload.addEventListener('load', reveal, { once: true });
-        }, 180);
+        }, 170);
     };
 
     const open = (item) => {
-        // Listujeme len medzi fotkami, ktoré sú práve viditeľné.
         list = items.filter((el) => el.getClientRects().length > 0);
+        if (!list.length) list = [item];
         lastFocus = item;
-        show(list.indexOf(item));
+        show(Math.max(0, list.indexOf(item)));
         box.hidden = false;
         requestAnimationFrame(() => box.classList.add('is-active'));
         lockScroll(true);
@@ -485,13 +503,12 @@ function initLightbox(items, signal) {
         if (e.key === 'ArrowRight') show(index + 1, true);
         if (e.key === 'ArrowLeft') show(index - 1, true);
         if (e.key === 'Tab') {
-            // Fokus krúži len medzi tlačidlami lightboxu.
             e.preventDefault();
             const pos = controls.indexOf(document.activeElement);
             const step = e.shiftKey ? -1 : 1;
             controls[(pos + step + controls.length) % controls.length].focus();
         }
-    }, { signal });
+    });
 
     let startX = 0;
     box.addEventListener('touchstart', (e) => { startX = e.changedTouches[0].screenX; }, { passive: true });
@@ -505,11 +522,24 @@ function initLightbox(items, signal) {
 /* ------------------------------------------------------------------
    Tlačidlo „Návrat hore“
 ------------------------------------------------------------------ */
-function initScrollTop(signal) {
+function initScrollTop() {
     const btn = document.getElementById('scroll-top');
     if (!btn) return;
     btn.addEventListener('click', () => scrollToTarget(0));
     const update = () => btn.classList.toggle('is-visible', window.scrollY > 1400);
-    window.addEventListener('scroll', update, { passive: true, signal });
+    window.addEventListener('scroll', update, { passive: true });
     update();
 }
+
+/* ------------------------------------------------------------------
+   Inicializácia
+------------------------------------------------------------------ */
+initSmoothScroll();
+initHeader();
+initHeroVideo();
+initMenu();
+initOpenStatus();
+initGallery();
+initReveal();
+initParallax();
+initScrollTop();
